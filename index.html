@@ -1,11 +1,184 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Mini Shop Test</title>
+<meta charset="utf-8">
+<title>Mister White 84</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  color: white;
+  text-align: center;
+
+  /* IMAGE DE FOND */
+  background-image: url('./background.jpg');
+  background-size: contain;       /* adapte l’image à l’écran sans zoomer */
+  background-position: center;    /* centre l’image */
+  background-repeat: no-repeat;   /* pas de répétition */
+  min-height: 100vh;              /* prend toute la hauteur de l’écran */
+}
+
+/* LOGO */
+.logo {
+  width: 160px;
+  border-radius: 50%;
+  margin-top: 20px;
+  border: 4px solid red;
+}
+
+/* MENU CATEGORIES */
+#menu {
+  margin: 20px 0;
+}
+
+#menu button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+/* PRODUITS */
+.product {
+  background: rgba(0,0,0,0.6); /* semi-transparent pour lisibilité */
+  margin: 15px;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+/* BOUTONS PANIER */
+button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* CHAMP ADRESSE */
+input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
-  <h1>🛒 Bienvenue dans mon mini shop !</h1>
-  <p>Clique sur un produit pour commander (test local)</p>
+
+<img src="logo.jpg" class="logo">
+<h1>MISTER WHITE 84</h1>
+
+<!-- MENU CATEGORIES -->
+<div id="menu">
+  <button onclick="showCategory('middle')">USA MiddleShelf🍁🗽</button>
+  <button onclick="showCategory('top')">USA TopShelf🍁🗽</button>
+  <button onclick="showCategory('choco')">chocolat/mousseux🧽🍫</button>
+  <button onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
+</div>
+
+<!-- PRODUITS -->
+
+<!-- USA MiddleShelf -->
+<div class="product" data-category="middle">
+  <h3>Produit Middle 1</h3>
+  <p>20€</p>
+  <button onclick="add('Produit Middle 1')">Ajouter</button>
+</div>
+<div class="product" data-category="middle">
+  <h3>Produit Middle 2</h3>
+  <p>25€</p>
+  <button onclick="add('Produit Middle 2')">Ajouter</button>
+</div>
+
+<!-- USA TopShelf -->
+<div class="product" data-category="top">
+  <h3>Produit Top 1</h3>
+  <p>40€</p>
+  <button onclick="add('Produit Top 1')">Ajouter</button>
+</div>
+
+<!-- Chocolat / mousseux -->
+<div class="product" data-category="choco">
+  <h3>Chocolat Spécial</h3>
+  <p>15€</p>
+  <button onclick="add('Chocolat Spécial')">Ajouter</button>
+</div>
+
+<!-- Fiesta -->
+<div class="product" data-category="fiesta">
+  <h3>Pack Fiesta</h3>
+  <p>30€</p>
+  <button onclick="add('Pack Fiesta')">Ajouter</button>
+</div>
+
+<h2>Panier</h2>
+<div id="cart"></div>
+
+<input id="address" placeholder="Adresse de livraison">
+<br><br>
+<button onclick="order()">Commander</button>
+
+<script>
+// FILTRER PAR CATEGORIE
+function showCategory(category) {
+  let products = document.querySelectorAll('.product');
+
+  products.forEach(p => {
+    if (p.getAttribute('data-category') === category) {
+      p.style.display = 'block';
+    } else {
+      p.style.display = 'none';
+    }
+  });
+}
+
+// PANIER
+let cart = [];
+function add(item) {
+  cart.push(item);
+  document.getElementById("cart").innerText = cart.join(", ");
+}
+
+// ENVOI COMMANDE SUR TELEGRAM
+function order() {
+  let address = document.getElementById("address").value;
+
+  if (cart.length === 0) {
+    alert("Panier vide");
+    return;
+  }
+
+  if (address === "") {
+    alert("Entre une adresse");
+    return;
+  }
+
+  let message = "🛒 Nouvelle commande\n\n";
+  message += "Produits :\n";
+  cart.forEach(p => message += "- " + p + "\n");
+  message += "\nAdresse : " + address;
+
+  // ⚠️ Remplace ces deux valeurs par les tiennes
+  let token = "8595266252:AAFsFaGPr2oxqlKOaP5fJ4VPTMNCLrHZP8o";
+  let chat_id = "8330410504";
+
+  let url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+
+  fetch(url);
+
+  alert("Commande envoyée !");
+  cart = [];
+  document.getElementById("cart").innerText = "";
+  document.getElementById("address").value = "";
+}
+</script>
+
 </body>
 </html>
