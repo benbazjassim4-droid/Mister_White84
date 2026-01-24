@@ -1,25 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mister White Shop</title>
 
 <style>
-/* ====== STYLE ORIGINAL (INCHANGÉ) ====== */
 :root{
   --card: rgba(0,0,0,0.72);
   --card2: rgba(0,0,0,0.78);
-  --text: #fff;
-  --muted: rgba(255,255,255,0.88);
   --shadow: 0 8px 22px rgba(0,0,0,0.35);
-  --radius: 14px;
-  --accent1: #ff8c00;
-  --accent2: #ff4500;
-  --green1: #32cd32;
-  --green2: #228b22;
-  --danger1: #ff4d4d;
-  --danger2: #b22222;
+  --accent1:#ff8c00;
+  --accent2:#ff4500;
+  --green1:#32cd32;
+  --green2:#228b22;
 }
 *{box-sizing:border-box}
 body{
@@ -45,37 +39,57 @@ body{
 .products.active{display:block}
 .product{
   background:var(--card);
-  padding:10px;border-radius:12px;margin:10px 0;
+  margin:10px 0;
+  padding:10px;
+  border-radius:12px;
 }
-.media img{
-  width:100%;height:165px;object-fit:cover;
-  border-radius:12px;cursor:pointer;
+.product img{
+  width:100%;
+  height:165px;
+  object-fit:cover;
+  border-radius:10px;
 }
 .add-btn{
   background:linear-gradient(135deg,var(--green1),var(--green2));
   border:none;border-radius:999px;
-  padding:10px 16px;color:white;font-weight:900;
+  padding:10px 16px;
+  color:white;font-weight:900;
 }
 .cart-box{
   background:var(--card2);
-  padding:12px;border-radius:14px
+  padding:12px;
+  border-radius:14px;
 }
 .telegram-btn{
-  display:block;margin-top:10px;padding:12px;
-  border-radius:12px;text-align:center;
+  display:block;
+  margin-top:10px;
+  padding:12px;
+  border-radius:12px;
+  text-align:center;
   background:rgba(255,255,255,.12);
-  color:white;font-weight:900;text-decoration:none;
+  color:white;
+  font-weight:900;
+  text-decoration:none;
 }
 .bottom-nav{
-  position:fixed;bottom:12px;left:0;right:0;
-  display:flex;justify-content:center;gap:14px
+  position:fixed;
+  bottom:12px;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:center;
+  gap:14px;
 }
 .nav-btn{
-  width:62px;height:62px;border-radius:999px;
-  background:rgba(0,0,0,.75);color:white;border:none
+  width:62px;
+  height:62px;
+  border-radius:999px;
+  background:rgba(0,0,0,.75);
+  color:white;
+  border:none;
 }
 .nav-btn.active{
-  background:linear-gradient(135deg,var(--accent1),var(--accent2))
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
 }
 </style>
 </head>
@@ -84,15 +98,22 @@ body{
 <div class="container">
 <img src="logo.jpg" class="logo">
 
-<!-- ===== MENU ===== -->
+<!-- MENU -->
 <div id="screenMenu" class="screen active">
   <div class="categories">
-    <button class="active" onclick="showCategory('usa2')">USA TopShelf🍁🗽</button>
+    <button id="btnCat-usa1" onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
+    <button id="btnCat-usa2" onclick="showCategory('usa2')" class="active">USA TopShelf🍁🗽</button>
+    <button id="btnCat-choco" onclick="showCategory('choco')">Chocolat/Mousseux🍫</button>
+    <button id="btnCat-fiesta" onclick="showCategory('fiesta')">Fiesta🥳</button>
   </div>
+
+  <div id="usa1" class="products"></div>
   <div id="usa2" class="products active"></div>
+  <div id="choco" class="products"></div>
+  <div id="fiesta" class="products"></div>
 </div>
 
-<!-- ===== PANIER ===== -->
+<!-- PANIER -->
 <div id="screenCart" class="screen">
   <div class="cart-box">
     <h3>🛒 Panier</h3>
@@ -101,26 +122,25 @@ body{
     <input id="address" placeholder="Adresse de livraison">
     <input id="snap" placeholder="Snapchat">
 
-    <!-- ✅ BOUTON TELEGRAM -->
     <a id="tgLink" class="telegram-btn" href="#" target="_blank">
       ✅ Activer le suivi Telegram (obligatoire)
     </a>
 
-    <button id="orderBtn" onclick="sendOrder()" class="add-btn" style="width:100%;margin-top:10px">
+    <button id="orderBtn" class="add-btn" style="width:100%;margin-top:10px" onclick="sendOrder()">
       Passer commande
     </button>
   </div>
 </div>
 </div>
 
-<!-- ===== NAV ===== -->
+<!-- NAV -->
 <div class="bottom-nav">
   <button id="btnMenu" class="nav-btn active" onclick="goMenu()">📋</button>
   <button id="btnCart" class="nav-btn" onclick="goCart()">🛒</button>
 </div>
 
 <script>
-/* ===== IDENTIFIANT CLIENT (NOUVEAU) ===== */
+/* ===== CLIENT ID ===== */
 function getClientId(){
   let id = localStorage.getItem("mw_client_id");
   if(!id){
@@ -130,90 +150,104 @@ function getClientId(){
   return id;
 }
 
-/* ===== TELEGRAM LINK (NOUVEAU) ===== */
-const BOT_USERNAME = "misterhattest_bot"; // 🔴 À MODIFIER ICI (sans @)
+/* ===== TELEGRAM ===== */
+const BOT_USERNAME = "misterhattest_bot"; // 🔴 À CHANGER
 
 document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("tgLink").href =
     `https://t.me/${BOT_USERNAME}?start=${getClientId()}`;
 });
 
-/* ===== PRODUIT (IDENTIQUE) ===== */
-const PRODUCTS = [{
-  id:"tha",
-  name:"Tha Phantom (Cotton Candy X Black Mamba)",
-  price:60,
-  img:"asset/tha_phantom.jpg"
-}];
+/* ===== PRODUITS ===== */
+const PRODUCTS = [
+  {id:"a",cat:"usa1",name:"Produit A",price:0,img:""},
+  {id:"tha",cat:"usa2",name:"Tha Phantom (Cotton Candy x Black Mamba)",price:60,img:"asset/tha_phantom.jpg"},
+  {id:"b",cat:"usa2",name:"Bubble Gum Runtz X Candy Gas",price:0,img:""},
+  {id:"c",cat:"choco",name:"Produit C",price:0,img:""},
+  {id:"d",cat:"fiesta",name:"Produit D",price:0,img:""}
+];
 
 let cart={};
 
 /* ===== UI ===== */
-function showCategory(){
-  document.getElementById("usa2").innerHTML = `
-    <div class="product">
-      <div class="media">
-        <img src="${PRODUCTS[0].img}">
-      </div>
-      <b>${PRODUCTS[0].name}</b><br>
-      Prix : 60€
-      <br><br>
-      <button class="add-btn" onclick="addToCart()">+ 60€</button>
-    </div>`;
+function showCategory(cat){
+  document.querySelectorAll(".products").forEach(p=>p.classList.remove("active"));
+  document.getElementById(cat).classList.add("active");
+  document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("btnCat-"+cat).classList.add("active");
+  renderProducts(cat);
 }
-showCategory();
 
-function addToCart(){
-  cart["tha"]={name:PRODUCTS[0].name,qty:1,price:60};
+function renderProducts(cat){
+  const el=document.getElementById(cat);
+  el.innerHTML="";
+  PRODUCTS.filter(p=>p.cat===cat).forEach(p=>{
+    el.innerHTML+=`
+      <div class="product">
+        ${p.img?`<img src="${p.img}">`:""}
+        <strong>${p.name}</strong><br>
+        ${p.price?`Prix : ${p.price}€`:"Prix : à venir"}
+        <br><br>
+        <button class="add-btn" onclick="addToCart('${p.id}')">
+          ${p.price?"+ "+p.price+"€":"Bientôt"}
+        </button>
+      </div>`;
+  });
+}
+showCategory("usa2");
+
+function addToCart(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p||!p.price)return alert("Produit bientôt dispo");
+  cart[id]={name:p.name,qty:1,price:p.price};
   renderCart();
 }
 
 function renderCart(){
-  document.getElementById("cartItems").innerHTML =
-    "- Tha Phantom x1 (60€)";
+  if(Object.keys(cart).length===0){
+    cartItems.innerHTML="Panier vide";
+    return;
+  }
+  cartItems.innerHTML=Object.values(cart)
+    .map(i=>`- ${i.name} (${i.price}€)`).join("<br>");
 }
 
 function goMenu(){
   screenMenu.classList.add("active");
   screenCart.classList.remove("active");
-  btnMenu.classList.add("active");
-  btnCart.classList.remove("active");
 }
 function goCart(){
   screenMenu.classList.remove("active");
   screenCart.classList.add("active");
-  btnMenu.classList.remove("active");
-  btnCart.classList.add("active");
 }
 
-/* ===== ENVOI COMMANDE (NOUVEAU) ===== */
+/* ===== COMMANDE ===== */
 async function sendOrder(){
-  const address=document.getElementById("address").value.trim();
-  if(!address){alert("Adresse manquante");return;}
+  if(Object.keys(cart).length===0)return alert("Panier vide");
+  if(!address.value)return alert("Adresse manquante");
 
-  const payload={
-    clientId:getClientId(),
-    items:[{name:PRODUCTS[0].name,qty:1,price:60}],
-    address,
-    snap:document.getElementById("snap").value,
-    total:60
-  };
+  const items=Object.values(cart);
+  const total=items.reduce((s,i)=>s+i.price,0);
 
   const res=await fetch("/api/order",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(payload)
+    body:JSON.stringify({
+      clientId:getClientId(),
+      items,
+      address:address.value,
+      snap:snap.value,
+      total
+    })
   });
   const data=await res.json();
 
   if(data.ok){
-    alert("Commande envoyée ! Tu es "+data.position+"ᵉ sur la liste d’attente.");
+    alert("Commande envoyée ! Tu es "+data.position+"ᵉ sur la liste.");
     cart={};
     renderCart();
     goMenu();
-  }else{
-    alert("Erreur commande");
-  }
+  }else alert("Erreur commande");
 }
 </script>
 </body>
