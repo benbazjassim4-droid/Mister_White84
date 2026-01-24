@@ -59,6 +59,9 @@ body {
 /* Products */
 .products {
   display: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 colonnes pour produits */
+  gap: 10px;
 }
 
 .product {
@@ -67,7 +70,16 @@ body {
   padding: 10px;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Boutons ajouter au panier "+" */
@@ -96,7 +108,7 @@ body {
   width: 100%;
   background: black;
   padding: 10px;
-  max-height: 40%;
+  max-height: 50%;
   overflow-y: auto;
 }
 
@@ -158,6 +170,34 @@ input, textarea {
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
+
+/* Modal vidéo */
+#videoModal {
+  display: none;
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#videoModal video {
+  max-width: 90%;
+  max-height: 80%;
+}
+
+#videoModal span {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
 </style>
 </head>
 
@@ -180,12 +220,15 @@ input, textarea {
     </div>
   </div>
 
-  <!-- USA TopShelf avec les deux nouveaux produits -->
   <div id="usa2" class="products">
-    <div class="product">
+    <div class="product" onclick="showVideo('assets/tha_phantom_video.mp4')">
+      <img src="assets/tha_phantom.jpg" alt="Tha Phantom" style="width:100%; border-radius:8px;">
       <span>Tha Phantom (Cotton Candy X Black Mamba)</span>
+      <p style="font-size:11px;">Découvrez notre première nouvelle Cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit😝</p>
+      <span style="font-weight:bold;">Prix: 60€</span>
       <button onclick="addToCart('Tha Phantom (Cotton Candy X Black Mamba)')">+</button>
     </div>
+
     <div class="product">
       <span>Bubble Gum Runtz X Candy Gas</span>
       <button onclick="addToCart('Bubble Gum Runtz X Candy Gas')">+</button>
@@ -222,12 +265,18 @@ input, textarea {
   <button class="order-btn" onclick="sendOrder()">Passer commande</button>
 </div>
 
+<!-- Modal vidéo -->
+<div id="videoModal">
+  <span onclick="closeVideo()">×</span>
+  <video id="videoPlayer" controls></video>
+</div>
+
 <script>
 let cart = [];
 
 function showCategory(cat) {
   document.querySelectorAll('.products').forEach(p => p.style.display = "none");
-  document.getElementById(cat).style.display = "block";
+  document.getElementById(cat).style.display = "grid";
 }
 
 function addToCart(item) {
@@ -244,8 +293,6 @@ function renderCart() {
     </div>`;
   });
   document.getElementById("cartItems").innerHTML = html;
-
-  // Total dynamique
   document.getElementById("totalItems").innerText = cart.length;
 }
 
@@ -283,6 +330,21 @@ function sendOrder() {
   alert("Commande envoyée !");
   cart = [];
   renderCart();
+}
+
+// VIDEO MODAL
+function showVideo(src) {
+  const modal = document.getElementById("videoModal");
+  const player = document.getElementById("videoPlayer");
+  player.src = src;
+  modal.style.display = "flex";
+}
+
+function closeVideo() {
+  const modal = document.getElementById("videoModal");
+  const player = document.getElementById("videoPlayer");
+  player.pause();
+  modal.style.display = "none";
 }
 </script>
 
