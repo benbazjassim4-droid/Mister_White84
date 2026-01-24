@@ -818,7 +818,8 @@ async function sendOrder(){
   btn.textContent = "Envoi…";
 
   try{
-    const res = await fetch("/api/order", {
+    const res = await fetch("https://mister-white84.vercel.app/api/order"
+", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -920,6 +921,7 @@ renderCart();
 </script>
 </body>
 </html>
+
 
 
 
