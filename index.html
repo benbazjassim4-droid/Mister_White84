@@ -337,6 +337,26 @@
   }
   .order-btn:active { transform: scale(0.99); }
 
+  /* ✅ Bouton Telegram (Étape 2) */
+  .telegram-btn{
+    display:block;
+    margin-top: 10px;
+    padding: 12px;
+    text-align:center;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-weight: 900;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.20);
+  }
+  .telegram-hint{
+    font-size: 12px;
+    opacity: 0.9;
+    margin-top: 6px;
+    text-align: center;
+  }
+
   /* Nav bas */
   .bottom-nav {
     position: fixed;
@@ -458,6 +478,14 @@
 
         <input class="address" id="address" placeholder="Adresse de livraison">
         <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
+
+        <!-- ✅ AJOUT : bouton Telegram (Étape 2) -->
+        <a class="telegram-btn" href="https://t.me/MisterWhiteShopBot" target="_blank">
+          ✅ Activer le suivi Telegram (obligatoire)
+        </a>
+        <div class="telegram-hint">
+          Clique puis appuie sur <b>Start</b> sur Telegram pour recevoir le suivi de ta commande
+        </div>
 
         <button id="orderBtn" class="order-btn" onclick="sendOrder()">Passer commande</button>
       </div>
