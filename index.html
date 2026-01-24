@@ -896,8 +896,17 @@ function escapeAttr(str){ return escapeHtml(str); }
 renderProducts();
 showCategory("usa1");
 renderCart();
-</script>
+</script function getClientId(){
+  let id = localStorage.getItem("mw_client_id");
+  if(!id){
+    id = Math.random().toString(16).slice(2) + Date.now().toString(16);
+    localStorage.setItem("mw_client_id", id);
+  }
+  return id;
+}
+>
 </body>
 </html>
+
 
 
