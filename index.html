@@ -892,6 +892,25 @@ function escapeHtml(str){
     .replaceAll("'","&#039;");
 }
 function escapeAttr(str){ return escapeHtml(str); }
+/* ===== IDENTIFIANT CLIENT (liste d'attente) ===== */
+function getClientId(){
+  let id = localStorage.getItem("mw_client_id");
+  if(!id){
+    id = Math.random().toString(16).slice(2) + Date.now().toString(16);
+    localStorage.setItem("mw_client_id", id);
+  }
+  return id;
+}
+
+/* ===== LIEN TELEGRAM AVEC /start ===== */
+const BOT_USERNAME = "misterhattest_bot"; // 🔴 à changer (sans le @)
+
+document.addEventListener("DOMContentLoaded", () => {
+  const link = document.getElementById("tgLink");
+  if(!link) return;
+  const clientId = getClientId();
+  link.href = `https://t.me/${BOT_USERNAME}?start=${clientId}`;
+});
 
 /* INIT */
 renderProducts();
@@ -900,3 +919,4 @@ renderCart();
 </script>
 </body>
 </html>
+
