@@ -1,42 +1,71 @@
+<!-- Début du code existant de ton site -->
+
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Mini Shop</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial;
-      background: #111;
-      color: white;
       text-align: center;
-      padding: 20px;
+      color: white;
+      background-image: url('background.jpg');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    header img {
+      width: 150px;
+      margin-top: 20px;
+    }
+    .categories {
+      margin-top: 20px;
+    }
+    .categories button {
+      margin: 5px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      border: none;
+      background-color: #555;
+      color: white;
+      font-size: 14px;
     }
     .product {
-      margin: 10px;
+      margin: 15px;
       padding: 10px;
       border: 1px solid white;
       border-radius: 10px;
-    }
-    button {
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: none;
-      background: green;
-      color: white;
-      font-size: 16px;
     }
     #cart {
       margin-top: 30px;
       border-top: 2px solid white;
       padding-top: 20px;
     }
+    input, textarea {
+      margin-top: 10px;
+      padding: 5px;
+      width: 200px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
   </style>
 </head>
 <body>
 
-<h1>🛒 Mini Shop</h1>
+<header>
+  <img src="logo.jpg" alt="Logo">
+</header>
 
+<div class="categories">
+  <button>USA MiddleShelf🍁🗽</button>
+  <button>USA TopShelf🍁🗽</button>
+  <button>chocolat/mousseux🧽🍫</button>
+  <button>Fiesta🥳🎉</button>
+</div>
+
+<!-- Section Produits -->
 <div class="product">
   <p>Produit A - 10€</p>
   <button onclick="addToCart('Produit A', 10)">Ajouter</button>
@@ -47,13 +76,21 @@
   <button onclick="addToCart('Produit B', 5)">Ajouter</button>
 </div>
 
+<!-- Section Panier -->
 <div id="cart">
   <h2>Panier</h2>
   <ul id="cartList"></ul>
   <h3>Total : <span id="total">0</span> €</h3>
+
+  <h3>Adresse</h3>
+  <input type="text" placeholder="Votre adresse" style="color:black;">
+
+  <h3>Snapchat</h3>
+  <input type="text" placeholder="Votre Snapchat">
 </div>
 
 <script>
+  // --- Total dynamique ---
   let total = 0;
 
   function addToCart(name, price) {
