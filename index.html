@@ -32,7 +32,6 @@
     background-repeat: no-repeat;
   }
 
-  /* Pour laisser de la place à la barre du bas */
   .safe-bottom { padding-bottom: 96px; }
 
   .container {
@@ -47,11 +46,9 @@
     display: block;
   }
 
-  /* Sections (Menu / Panier) */
   .screen { display: none; }
   .screen.active { display: block; }
 
-  /* Categories (4 boutons comme au départ) */
   .categories {
     display: flex;
     justify-content: space-between;
@@ -61,7 +58,6 @@
 
   .categories button {
     flex: 1;
-    margin: 0;
     padding: 10px 8px;
     border: none;
     border-radius: 15px;
@@ -78,7 +74,6 @@
     background: linear-gradient(135deg, var(--accent1), var(--accent2));
   }
 
-  /* Products */
   .products { display: none; }
   .products.active { display: block; }
 
@@ -89,11 +84,11 @@
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     box-shadow: var(--shadow);
   }
 
-  /* Media */
+  /* ✅ Média plus petit pour mobile */
   .media {
     width: 100%;
     border-radius: 10px;
@@ -102,9 +97,15 @@
   }
   .media img {
     width: 100%;
+    height: 190px;          /* ✅ réduit */
+    object-fit: cover;      /* ✅ cadrage clean */
     display: block;
     cursor: pointer;
   }
+  @media (max-width: 360px){
+    .media img { height: 170px; }
+  }
+
   .placeholder {
     width: 100%;
     height: 170px;
@@ -123,8 +124,28 @@
     margin-top: 4px;
   }
 
-  .title { font-weight: 800; line-height: 1.2; }
-  .desc  { color: var(--muted); font-size: 13px; line-height: 1.35; }
+  .title { font-weight: 900; line-height: 1.2; }
+
+  /* ✅ Rubriques */
+  .section {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .section .section-title{
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    opacity: 0.95;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .section .section-body{
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+  }
 
   .row {
     display:flex;
@@ -135,7 +156,6 @@
 
   .price { font-weight: 900; }
 
-  /* Bouton + avec prix */
   .add-btn {
     background: linear-gradient(135deg, var(--green1), var(--green2));
     color: white;
@@ -154,7 +174,6 @@
     white-space: nowrap;
   }
   .add-btn:active { transform: scale(0.97); }
-  .add-btn[disabled] { opacity: 0.55; cursor: not-allowed; }
 
   /* PANIER */
   .cart-box {
@@ -208,12 +227,7 @@
     color: rgba(255,255,255,0.75);
   }
 
-  .cart-info {
-    min-width: 0;
-    display:flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+  .cart-info { min-width: 0; display:flex; flex-direction: column; gap: 2px; }
   .cart-name {
     font-weight: 900;
     white-space: nowrap;
@@ -223,12 +237,7 @@
   }
   .cart-sub { font-size: 12px; color: var(--muted); }
 
-  .cart-controls {
-    display:flex;
-    align-items:center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+  .cart-controls { display:flex; align-items:center; gap: 8px; flex-shrink: 0; }
 
   .qty-btn {
     width: 32px;
@@ -243,11 +252,7 @@
   }
   .qty-btn:active { transform: scale(0.95); }
 
-  .qty {
-    width: 22px;
-    text-align:center;
-    font-weight: 900;
-  }
+  .qty { width: 22px; text-align:center; font-weight: 900; }
 
   .remove-btn {
     width: 32px;
@@ -263,11 +268,7 @@
   }
   .remove-btn:active { transform: scale(0.95); }
 
-  .totals {
-    margin-top: 10px;
-    font-weight: 900;
-    line-height: 1.4;
-  }
+  .totals { margin-top: 10px; font-weight: 900; line-height: 1.4; }
 
   input {
     width: 100%;
@@ -276,7 +277,6 @@
     border-radius: 10px;
     border: none;
     outline: none;
-    box-sizing: border-box;
   }
   .address {
     background: rgba(0,0,0,0.75);
@@ -301,7 +301,7 @@
   .order-btn:active { transform: scale(0.99); }
   .order-btn[disabled]{ opacity: 0.65; cursor: not-allowed; }
 
-  /* Barre nav du bas */
+  /* Nav bas */
   .bottom-nav {
     position: fixed;
     left: 0;
@@ -335,7 +335,6 @@
   .nav-btn .emoji { font-size: 20px; line-height: 20px; }
   .nav-btn .label { font-size: 11px; }
 
-  /* Badge panier */
   .cart-badge {
     position: absolute;
     top: -6px;
@@ -352,7 +351,7 @@
     box-shadow: var(--shadow);
   }
 
-  /* Modal vidéo */
+  /* ✅ Modal vidéo plus petit pour téléphone */
   #videoModal {
     display: none;
     position: fixed;
@@ -363,10 +362,12 @@
     align-items: center;
     padding: 16px;
   }
-  #videoModal .inner { width: min(920px, 96vw); }
+  #videoModal .inner {
+    width: min(520px, 94vw);
+  }
   #videoModal video {
     width: 100%;
-    max-height: 80vh;
+    max-height: 55vh;        /* ✅ réduit */
     border-radius: 12px;
     background: black;
   }
@@ -380,7 +381,6 @@
     user-select: none;
   }
 
-  /* Petite anim */
   .pulse { animation: pulse 0.25s ease-in-out; }
   @keyframes pulse {
     0% { transform: scale(1); }
@@ -394,7 +394,6 @@
   <div class="container">
     <img src="logo.jpg" class="logo" alt="Logo">
 
-    <!-- ÉCRAN 1 : MENU -->
     <div id="screenMenu" class="screen active">
       <div class="categories">
         <button id="btnCat-usa1" onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
@@ -403,14 +402,12 @@
         <button id="btnCat-fiesta" onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
       </div>
 
-      <!-- Les sections sont remplies par JS -->
       <div id="usa1" class="products"></div>
       <div id="usa2" class="products"></div>
       <div id="choco" class="products"></div>
       <div id="fiesta" class="products"></div>
     </div>
 
-    <!-- ÉCRAN 2 : PANIER -->
     <div id="screenCart" class="screen">
       <div class="cart-box">
         <div class="cart-header">
@@ -433,7 +430,6 @@
     </div>
   </div>
 
-  <!-- NAV BAR (2 ronds) -->
   <div class="bottom-nav">
     <button id="btnMenu" class="nav-btn active" onclick="goMenu()">
       <div class="emoji">📋</div>
@@ -447,7 +443,6 @@
     </button>
   </div>
 
-  <!-- MODAL VIDÉO -->
   <div id="videoModal" onclick="onModalBackdropClick(event)">
     <div class="close" onclick="closeVideo()">×</div>
     <div class="inner">
@@ -457,13 +452,23 @@
 
 <script>
 /* =========================
-   PRODUITS (propre)
+   PRODUITS
+   - Infos + Détails pour tous (on modifiera après)
    ========================= */
-const PRODUCTS = [
-  // USA MiddleShelf (placeholder pour l’instant)
-  { id:"prodA", category:"usa1", name:"Produit A", price:0, img:"", video:"", lines:["Bientôt disponible"] },
+const DEFAULT_INFO = `Infos à venir…`;
+const DEFAULT_DETAILS = [
+  `Strain: —`,
+  `Breeder: —`,
+  `Poids: —`,
+  `Prix: —`
+];
 
-  // USA TopShelf (Tha Phantom: image + vidéo + description lignes)
+const PRODUCTS = [
+  { id:"prodA", category:"usa1", name:"Produit A", price:0, img:"", video:"",
+    info: DEFAULT_INFO,
+    details: DEFAULT_DETAILS
+  },
+
   {
     id:"tha_phantom",
     category:"usa2",
@@ -471,33 +476,38 @@ const PRODUCTS = [
     price:60,
     img:"asset/tha_phantom.jpg",
     video:"asset/tha_phantom_video.mp4",
-    lines:[
-      "Strain: Tha Phantom (cotton candy x black mamba)",
-      "Breeder: Exotikz Flowerz",
-      "Poids: 3,5g",
-      "Prix: 60€"
+    info: `Découvrez notre première nouvelle cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit.`,
+    details: [
+      `Strain: Tha Phantom (cotton candy x black mamba)`,
+      `Breeder: Exotikz Flowerz`,
+      `Poids: 3,5g`,
+      `Prix: 60€`
     ]
   },
-  // Autre produit placeholder
-  { id:"prodB", category:"usa2", name:"Bubble Gum Runtz X Candy Gas", price:0, img:"", video:"", lines:["Bientôt disponible"] },
 
-  // Chocolat/Mousseux placeholder
-  { id:"prodC", category:"choco", name:"Produit C", price:0, img:"", video:"", lines:["Bientôt disponible"] },
+  { id:"prodB", category:"usa2", name:"Bubble Gum Runtz X Candy Gas", price:0, img:"", video:"",
+    info: DEFAULT_INFO,
+    details: DEFAULT_DETAILS
+  },
 
-  // Fiesta placeholder
-  { id:"prodD", category:"fiesta", name:"Produit D", price:0, img:"", video:"", lines:["Bientôt disponible"] },
+  { id:"prodC", category:"choco", name:"Produit C", price:0, img:"", video:"",
+    info: DEFAULT_INFO,
+    details: DEFAULT_DETAILS
+  },
+
+  { id:"prodD", category:"fiesta", name:"Produit D", price:0, img:"", video:"",
+    info: DEFAULT_INFO,
+    details: DEFAULT_DETAILS
+  },
 ];
 
 /* =========================
    PANIER (quantités + sauvegarde)
-   cart = { [id]: {id,name,price,img,qty} }
    ========================= */
-const CART_KEY = "mw_cart_v2";
+const CART_KEY = "mw_cart_v3";
 let cart = loadCart();
 
-/* =========================
-   NAV / ÉCRANS
-   ========================= */
+/* NAV */
 function goMenu() {
   document.getElementById("screenMenu").classList.add("active");
   document.getElementById("screenCart").classList.remove("active");
@@ -512,16 +522,13 @@ function goCart() {
   document.getElementById("btnCart").classList.add("active");
 }
 
-/* =========================
-   CATEGORIES
-   ========================= */
+/* Catégories */
 function setActiveCatBtn(cat) {
   ["usa1","usa2","choco","fiesta"].forEach(c => {
     const btn = document.getElementById("btnCat-" + c);
     if(btn) btn.classList.toggle("active", c === cat);
   });
 }
-
 function showCategory(cat) {
   document.querySelectorAll(".products").forEach(s => s.classList.remove("active"));
   const section = document.getElementById(cat);
@@ -529,11 +536,8 @@ function showCategory(cat) {
   setActiveCatBtn(cat);
 }
 
-/* =========================
-   RENDER PRODUITS
-   ========================= */
+/* Render produits */
 function renderProducts() {
-  // vide les sections
   ["usa1","usa2","choco","fiesta"].forEach(cat => {
     document.getElementById(cat).innerHTML = "";
   });
@@ -563,19 +567,31 @@ function renderProducts() {
     }
     card.appendChild(media);
 
-    // title
+    // ✅ Titre (ex: "Tha Phantom")
     const title = document.createElement("div");
     title.className = "title";
     title.textContent = p.name;
     card.appendChild(title);
 
-    // desc
-    const desc = document.createElement("div");
-    desc.className = "desc";
-    desc.innerHTML = (p.lines || []).map(l => escapeHtml(l)).join("<br>");
-    card.appendChild(desc);
+    // ✅ Rubrique INFOS
+    const infoBox = document.createElement("div");
+    infoBox.className = "section";
+    infoBox.innerHTML = `
+      <div class="section-title">Infos</div>
+      <div class="section-body">${escapeHtml(p.info || "")}</div>
+    `;
+    card.appendChild(infoBox);
 
-    // price + add button
+    // ✅ Rubrique DETAILS
+    const detailsBox = document.createElement("div");
+    detailsBox.className = "section";
+    detailsBox.innerHTML = `
+      <div class="section-title">Détails</div>
+      <div class="section-body">${(p.details || []).map(x => escapeHtml(x)).join("<br>")}</div>
+    `;
+    card.appendChild(detailsBox);
+
+    // price + add
     const row = document.createElement("div");
     row.className = "row";
 
@@ -586,13 +602,11 @@ function renderProducts() {
     const add = document.createElement("button");
     add.className = "add-btn";
 
-    // bouton affiche + prix
     if(p.price > 0){
       add.innerHTML = `<span style="font-size:18px;font-weight:900;">+</span><span>${p.price}€</span>`;
       add.onclick = () => addToCart(p.id);
     } else {
       add.innerHTML = `<span style="font-size:18px;font-weight:900;">+</span><span>à venir</span>`;
-      add.disabled = false;
       add.onclick = () => alert("Produit bientôt disponible");
     }
 
@@ -604,9 +618,7 @@ function renderProducts() {
   });
 }
 
-/* =========================
-   CART ACTIONS
-   ========================= */
+/* Cart actions */
 function addToCart(productId){
   const p = PRODUCTS.find(x => x.id === productId);
   if(!p) return;
@@ -620,7 +632,6 @@ function addToCart(productId){
   saveCart();
   renderCart();
 
-  // feedback
   try { if(navigator.vibrate) navigator.vibrate(18); } catch(e){}
   pulse(document.getElementById("btnCart"));
   pulse(document.getElementById("cartBadge"));
@@ -656,9 +667,7 @@ function clearCart(){
   renderCart();
 }
 
-/* =========================
-   RENDER CART + BADGE
-   ========================= */
+/* Render cart + badge */
 function renderCart(){
   const items = Object.values(cart);
   const root = document.getElementById("cartItems");
@@ -700,7 +709,6 @@ function renderCart(){
   document.getElementById("totalItems").textContent = totalQty;
   document.getElementById("totalPrice").textContent = totalPrice.toFixed(0);
 
-  // badge
   const badge = document.getElementById("cartBadge");
   if(totalQty > 0){
     badge.style.display = "flex";
@@ -710,9 +718,7 @@ function renderCart(){
   }
 }
 
-/* =========================
-   TELEGRAM ORDER (OK -> vider)
-   ========================= */
+/* Telegram order */
 async function sendOrder(){
   const items = Object.values(cart);
   const address = document.getElementById("address").value.trim();
@@ -734,9 +740,8 @@ async function sendOrder(){
   message += `\nAdresse: ${address}`;
   message += `\nSnap: ${snap ? snap : "Non renseigné"}`;
 
-  // ⚠️ mets tes infos ici (tu veux les laisser visibles pour le moment)
-  const token = "8595266252:AAFsFaGPr2oxqlKOaP5fJ4VPTMNCLrHZP8o";
-  const chat_id = "8330410504";
+  const token = "TON_TOKEN";
+  const chat_id = "TON_CHAT_ID";
 
   const btn = document.getElementById("orderBtn");
   btn.disabled = true;
@@ -750,7 +755,6 @@ async function sendOrder(){
     });
 
     const data = await res.json().catch(() => ({}));
-
     if(res.ok && data && data.ok){
       alert("Commande envoyée !");
       clearCart();
@@ -768,16 +772,13 @@ async function sendOrder(){
   }
 }
 
-/* =========================
-   VIDEO MODAL (X / dehors / ESC)
-   ========================= */
+/* Vidéo modal */
 function showVideo(src){
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
   player.src = src;
   modal.style.display = "flex";
 }
-
 function closeVideo(){
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
@@ -785,11 +786,9 @@ function closeVideo(){
   player.src = "";
   modal.style.display = "none";
 }
-
 function onModalBackdropClick(e){
   if(e.target && e.target.id === "videoModal") closeVideo();
 }
-
 document.addEventListener("keydown", (e) => {
   if(e.key === "Escape"){
     const modal = document.getElementById("videoModal");
@@ -797,9 +796,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* =========================
-   localStorage
-   ========================= */
+/* Storage */
 function loadCart(){
   try{
     const raw = localStorage.getItem(CART_KEY);
@@ -814,9 +811,7 @@ function saveCart(){
   try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){}
 }
 
-/* =========================
-   helpers
-   ========================= */
+/* Helpers */
 function pulse(el){
   if(!el) return;
   el.classList.remove("pulse");
@@ -833,13 +828,10 @@ function escapeHtml(str){
 }
 function escapeAttr(str){ return escapeHtml(str); }
 
-/* =========================
-   INIT
-   ========================= */
+/* INIT */
 renderProducts();
-showCategory("usa1");  // catégorie par défaut
+showCategory("usa1");
 renderCart();
 </script>
 </body>
 </html>
-
