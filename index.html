@@ -840,8 +840,8 @@ const res = await fetch(`${API_BASE}/api/order`, {
       document.getElementById("snap").value = "";
       goMenu();
     }else{
-      alert("Erreur : commande non envoyée");
-    }
+  alert("Erreur API : " + (data.error || ("HTTP " + res.status)));
+}
   }catch(e){
     alert("Erreur réseau");
   }finally{
@@ -926,6 +926,7 @@ renderCart();
 </script>
 </body>
 </html>
+
 
 
 
