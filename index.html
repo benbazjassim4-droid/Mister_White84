@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Mister White Shop</title>
 
 <style>
@@ -25,8 +25,10 @@ body{
 .safe-bottom{padding-bottom:96px}
 .container{max-width:420px;margin:auto;padding:10px}
 .logo{width:120px;margin:10px auto;display:block}
+
 .screen{display:none}
 .screen.active{display:block}
+
 .categories{display:flex;gap:6px;margin:10px 0}
 .categories button{
   flex:1;padding:10px;border:none;border-radius:15px;
@@ -35,61 +37,48 @@ body{
 .categories button.active{
   background:linear-gradient(135deg,var(--accent1),var(--accent2));
 }
+
 .products{display:none}
 .products.active{display:block}
+
 .product{
   background:var(--card);
-  margin:10px 0;
-  padding:10px;
-  border-radius:12px;
+  padding:10px;border-radius:12px;margin:10px 0;
 }
-.product img{
-  width:100%;
-  height:165px;
-  object-fit:cover;
-  border-radius:10px;
+
+.media img{
+  width:100%;height:165px;object-fit:cover;
+  border-radius:12px;cursor:pointer;
 }
+
 .add-btn{
   background:linear-gradient(135deg,var(--green1),var(--green2));
   border:none;border-radius:999px;
-  padding:10px 16px;
-  color:white;font-weight:900;
+  padding:10px 16px;color:white;font-weight:900;
 }
+
 .cart-box{
   background:var(--card2);
-  padding:12px;
-  border-radius:14px;
+  padding:12px;border-radius:14px
 }
+
 .telegram-btn{
-  display:block;
-  margin-top:10px;
-  padding:12px;
-  border-radius:12px;
-  text-align:center;
+  display:block;margin-top:10px;padding:12px;
+  border-radius:12px;text-align:center;
   background:rgba(255,255,255,.12);
-  color:white;
-  font-weight:900;
-  text-decoration:none;
+  color:white;font-weight:900;text-decoration:none;
 }
+
 .bottom-nav{
-  position:fixed;
-  bottom:12px;
-  left:0;
-  right:0;
-  display:flex;
-  justify-content:center;
-  gap:14px;
+  position:fixed;bottom:12px;left:0;right:0;
+  display:flex;justify-content:center;gap:14px
 }
 .nav-btn{
-  width:62px;
-  height:62px;
-  border-radius:999px;
-  background:rgba(0,0,0,.75);
-  color:white;
-  border:none;
+  width:62px;height:62px;border-radius:999px;
+  background:rgba(0,0,0,.75);color:white;border:none
 }
 .nav-btn.active{
-  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  background:linear-gradient(135deg,var(--accent1),var(--accent2))
 }
 </style>
 </head>
@@ -98,13 +87,13 @@ body{
 <div class="container">
 <img src="logo.jpg" class="logo">
 
-<!-- MENU -->
+<!-- ===== MENU ===== -->
 <div id="screenMenu" class="screen active">
   <div class="categories">
-    <button id="btnCat-usa1" onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
-    <button id="btnCat-usa2" onclick="showCategory('usa2')" class="active">USA TopShelf🍁🗽</button>
-    <button id="btnCat-choco" onclick="showCategory('choco')">Chocolat/Mousseux🍫</button>
-    <button id="btnCat-fiesta" onclick="showCategory('fiesta')">Fiesta🥳</button>
+    <button id="btn-usa1" onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
+    <button id="btn-usa2" onclick="showCategory('usa2')" class="active">USA TopShelf🍁🗽</button>
+    <button id="btn-choco" onclick="showCategory('choco')">Chocolat/Mousseux🍫</button>
+    <button id="btn-fiesta" onclick="showCategory('fiesta')">Fiesta🥳</button>
   </div>
 
   <div id="usa1" class="products"></div>
@@ -113,7 +102,7 @@ body{
   <div id="fiesta" class="products"></div>
 </div>
 
-<!-- PANIER -->
+<!-- ===== PANIER ===== -->
 <div id="screenCart" class="screen">
   <div class="cart-box">
     <h3>🛒 Panier</h3>
@@ -126,14 +115,14 @@ body{
       ✅ Activer le suivi Telegram (obligatoire)
     </a>
 
-    <button id="orderBtn" class="add-btn" style="width:100%;margin-top:10px" onclick="sendOrder()">
+    <button id="orderBtn" onclick="sendOrder()" class="add-btn" style="width:100%;margin-top:10px">
       Passer commande
     </button>
   </div>
 </div>
 </div>
 
-<!-- NAV -->
+<!-- ===== NAV ===== -->
 <div class="bottom-nav">
   <button id="btnMenu" class="nav-btn active" onclick="goMenu()">📋</button>
   <button id="btnCart" class="nav-btn" onclick="goCart()">🛒</button>
@@ -159,57 +148,58 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 /* ===== PRODUITS ===== */
-const PRODUCTS = [
-  {id:"a",cat:"usa1",name:"Produit A",price:0,img:""},
-  {id:"tha",cat:"usa2",name:"Tha Phantom (Cotton Candy x Black Mamba)",price:60,img:"asset/tha_phantom.jpg"},
-  {id:"b",cat:"usa2",name:"Bubble Gum Runtz X Candy Gas",price:0,img:""},
-  {id:"c",cat:"choco",name:"Produit C",price:0,img:""},
-  {id:"d",cat:"fiesta",name:"Produit D",price:0,img:""}
-];
+const PRODUCTS = {
+  usa1:[
+    {name:"Produit A",price:0}
+  ],
+  usa2:[
+    {name:"Tha Phantom (Cotton Candy X Black Mamba)",price:60,img:"asset/tha_phantom.jpg"}
+  ],
+  choco:[
+    {name:"Produit C",price:0}
+  ],
+  fiesta:[
+    {name:"Produit D",price:0}
+  ]
+};
 
 let cart={};
 
-/* ===== UI ===== */
+/* ===== CATÉGORIES ===== */
 function showCategory(cat){
   document.querySelectorAll(".products").forEach(p=>p.classList.remove("active"));
   document.getElementById(cat).classList.add("active");
+
   document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
-  document.getElementById("btnCat-"+cat).classList.add("active");
+  document.getElementById("btn-"+cat).classList.add("active");
+
   renderProducts(cat);
 }
 
 function renderProducts(cat){
-  const el=document.getElementById(cat);
-  el.innerHTML="";
-  PRODUCTS.filter(p=>p.cat===cat).forEach(p=>{
-    el.innerHTML+=`
+  const box=document.getElementById(cat);
+  box.innerHTML="";
+  PRODUCTS[cat].forEach(p=>{
+    box.innerHTML+=`
       <div class="product">
-        ${p.img?`<img src="${p.img}">`:""}
-        <strong>${p.name}</strong><br>
+        ${p.img?`<div class="media"><img src="${p.img}"></div>`:""}
+        <b>${p.name}</b><br>
         ${p.price?`Prix : ${p.price}€`:"Prix : à venir"}
         <br><br>
-        <button class="add-btn" onclick="addToCart('${p.id}')">
+        <button class="add-btn" onclick="addToCart('${p.name}',${p.price})">
           ${p.price?"+ "+p.price+"€":"Bientôt"}
         </button>
-      </div>`;
+      </div>
+    `;
   });
 }
 showCategory("usa2");
 
-function addToCart(id){
-  const p=PRODUCTS.find(x=>x.id===id);
-  if(!p||!p.price)return alert("Produit bientôt dispo");
-  cart[id]={name:p.name,qty:1,price:p.price};
-  renderCart();
-}
-
-function renderCart(){
-  if(Object.keys(cart).length===0){
-    cartItems.innerHTML="Panier vide";
-    return;
-  }
-  cartItems.innerHTML=Object.values(cart)
-    .map(i=>`- ${i.name} (${i.price}€)`).join("<br>");
+/* ===== PANIER ===== */
+function addToCart(name,price){
+  if(!price) return alert("Produit bientôt disponible");
+  cart={name,price};
+  cartItems.innerHTML=`- ${name} ( ${price}€ )`;
 }
 
 function goMenu(){
@@ -223,31 +213,30 @@ function goCart(){
 
 /* ===== COMMANDE ===== */
 async function sendOrder(){
-  if(Object.keys(cart).length===0)return alert("Panier vide");
-  if(!address.value)return alert("Adresse manquante");
+  if(!cart.name) return alert("Panier vide");
+  if(!address.value) return alert("Adresse manquante");
 
-  const items=Object.values(cart);
-  const total=items.reduce((s,i)=>s+i.price,0);
-
-  const res=await fetch("/api/order",{
+  const res = await fetch("/api/order",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
       clientId:getClientId(),
-      items,
+      items:[cart],
       address:address.value,
       snap:snap.value,
-      total
+      total:cart.price
     })
   });
-  const data=await res.json();
+  const data = await res.json();
 
   if(data.ok){
     alert("Commande envoyée ! Tu es "+data.position+"ᵉ sur la liste.");
     cart={};
-    renderCart();
+    cartItems.innerHTML="Panier vide";
     goMenu();
-  }else alert("Erreur commande");
+  }else{
+    alert("Erreur commande");
+  }
 }
 </script>
 </body>
