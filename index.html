@@ -50,7 +50,6 @@ body {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .categories button:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -59,11 +58,9 @@ body {
 /* Products */
 .products {
   display: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 colonnes pour produits */
-  gap: 10px;
 }
 
+/* Produit “carte” */
 .product {
   background: rgba(0,0,0,0.7);
   margin: 5px 0;
@@ -71,32 +68,31 @@ body {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  gap: 6px;
+}
+
+/* Image cliquable */
+.product img {
+  width: 100%;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.product:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-/* Boutons ajouter au panier "+" */
-.product button {
+/* Bouton + */
+.product button.add-btn {
+  align-self: flex-end;
   background: linear-gradient(135deg, #32cd32, #228b22);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
-.product button:hover {
-  transform: scale(1.2);
+.product button.add-btn:hover {
+  transform: scale(1.15);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
@@ -108,8 +104,9 @@ body {
   width: 100%;
   background: black;
   padding: 10px;
-  max-height: 50%;
+  max-height: 40%;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .cart h3 {
@@ -120,37 +117,40 @@ body {
 .cart-item {
   display: flex;
   justify-content: space-between;
-  margin: 3px 0;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
 }
 
-/* Bouton supprimer du panier ❌ */
-.cart-item button {
+/* Bouton supprimer ❌ */
+.cart-item button.remove-btn {
   background: linear-gradient(135deg, #ff4d4d, #b22222);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  width: 26px;
+  height: 26px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
-.cart-item button:hover {
-  transform: scale(1.2);
+.cart-item button.remove-btn:hover {
+  transform: scale(1.15);
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-input, textarea {
+input {
   width: 100%;
   padding: 8px;
-  margin-top: 5px;
+  margin-top: 6px;
   border-radius: 8px;
   border: none;
+  box-sizing: border-box;
 }
 
 .address {
   background: black;
   color: white;
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
 /* Bouton passer commande */
@@ -163,11 +163,11 @@ input, textarea {
   border-radius: 10px;
   color: white;
   font-size: 16px;
+  cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .order-btn:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
@@ -175,28 +175,30 @@ input, textarea {
 #videoModal {
   display: none;
   position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background: rgba(0,0,0,0.8);
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
   justify-content: center;
   align-items: center;
-  z-index: 999;
 }
 
 #videoModal video {
-  max-width: 90%;
+  max-width: 92%;
   max-height: 80%;
+  border-radius: 10px;
 }
 
-#videoModal span {
+#videoModal .close {
   position: absolute;
-  top: 20px;
-  right: 30px;
-  font-size: 30px;
+  top: 12px;
+  right: 18px;
+  font-size: 34px;
   color: white;
   cursor: pointer;
+  user-select: none;
 }
 </style>
 </head>
@@ -213,61 +215,71 @@ input, textarea {
     <button onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
   </div>
 
+  <!-- Catégorie 1 (exemple neutre) -->
   <div id="usa1" class="products">
     <div class="product">
-      <span>Weed OG</span>
-      <button onclick="addToCart('Weed OG')">+</button>
+      <strong>Produit A</strong>
+      <small>Description courte…</small>
+      <button class="add-btn" onclick="addToCart('Produit A')">+</button>
     </div>
   </div>
 
+  <!-- Catégorie 2 : 1er produit avec image + vidéo au clic -->
   <div id="usa2" class="products">
-    <div class="product" onclick="showVideo('assets2tha_phantom_video.mp4')">
-      <img src="assets/tha_phantom.jpg" alt="Tha Phantom" style="width:100%; border-radius:8px;">
-      <span>Tha Phantom (Cotton Candy X Black Mamba)</span>
-      <p style="font-size:11px;">Découvrez notre première nouvelle Cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit😝</p>
-      <span style="font-weight:bold;">Prix: 60€</span>
-      <button onclick="addToCart('Tha Phantom (Cotton Candy X Black Mamba)')">+</button>
+    <div class="product">
+      <img
+        src="asset/tha_phantom.jpg"
+        alt="Produit vedette"
+        onclick="showVideo('asset/tha_phantom_video.mp4')"
+      >
+      <strong>Tha Phantom (Cotton Candy X Black Mamba)</strong>
+      <small>Découvrez notre première nouvelle Cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit😝</small>
+      <strong>Prix : 60€</strong>
+      <button class="add-btn" onclick="addToCart('Tha Phantom (Cotton Candy X Black Mamba)')">+</button>
     </div>
 
     <div class="product">
-      <span>Bubble Gum Runtz X Candy Gas</span>
-      <button onclick="addToCart('Bubble Gum Runtz X Candy Gas')">+</button>
+      <strong>Bubble Gum Runtz X Candy Gas</strong>
+      <small>Description à venir…</small>
+      <button class="add-btn" onclick="addToCart('Bubble Gum Runtz X Candy Gas')">+</button>
     </div>
   </div>
 
+  <!-- Catégorie 3 (exemple neutre) -->
   <div id="choco" class="products">
     <div class="product">
-      <span>Choco Space</span>
-      <button onclick="addToCart('Choco Space')">+</button>
+      <strong>Produit C</strong>
+      <small>Description courte…</small>
+      <button class="add-btn" onclick="addToCart('Produit C')">+</button>
     </div>
   </div>
 
+  <!-- Catégorie 4 (exemple neutre) -->
   <div id="fiesta" class="products">
     <div class="product">
-      <span>Pack Fiesta</span>
-      <button onclick="addToCart('Pack Fiesta')">+</button>
+      <strong>Produit D</strong>
+      <small>Description courte…</small>
+      <button class="add-btn" onclick="addToCart('Produit D')">+</button>
     </div>
   </div>
 </div>
 
-<!-- PANIER INDEPENDANT -->
+<!-- PANIER -->
 <div class="cart">
   <h3>🛒 Panier</h3>
   <div id="cartItems"></div>
 
   <input class="address" id="address" placeholder="Adresse de livraison">
-
   <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
 
-  <!-- TOTAL -->
-  <h4>Total: <span id="totalItems">0</span> article(s)</h4>
+  <h4>Total : <span id="totalItems">0</span> article(s)</h4>
 
   <button class="order-btn" onclick="sendOrder()">Passer commande</button>
 </div>
 
-<!-- Modal vidéo -->
+<!-- MODAL VIDEO -->
 <div id="videoModal">
-  <span onclick="closeVideo()">×</span>
+  <div class="close" onclick="closeVideo()">×</div>
   <video id="videoPlayer" controls></video>
 </div>
 
@@ -276,7 +288,7 @@ let cart = [];
 
 function showCategory(cat) {
   document.querySelectorAll('.products').forEach(p => p.style.display = "none");
-  document.getElementById(cat).style.display = "grid";
+  document.getElementById(cat).style.display = "block";
 }
 
 function addToCart(item) {
@@ -288,8 +300,8 @@ function renderCart() {
   let html = "";
   cart.forEach((item, i) => {
     html += `<div class="cart-item">
-      ${item}
-      <button onclick="removeItem(${i})">❌</button>
+      <span>${item}</span>
+      <button class="remove-btn" onclick="removeItem(${i})">❌</button>
     </div>`;
   });
   document.getElementById("cartItems").innerHTML = html;
@@ -297,42 +309,45 @@ function renderCart() {
 }
 
 function removeItem(i) {
-  cart.splice(i,1);
+  cart.splice(i, 1);
   renderCart();
 }
 
 function sendOrder() {
-  let address = document.getElementById("address").value;
-  let snap = document.getElementById("snap").value;
+  const address = document.getElementById("address").value.trim();
+  const snap = document.getElementById("snap").value.trim();
 
-  if(cart.length == 0) {
+  if (cart.length === 0) {
     alert("Panier vide");
+    return;
+  }
+  if (!address) {
+    alert("Ajoute une adresse");
     return;
   }
 
   let message = "Nouvelle commande:\n\n";
   cart.forEach(i => message += "- " + i + "\n");
   message += "\nAdresse: " + address;
-  message += "\nSnap: " + snap;
+  message += "\nSnap: " + (snap ? snap : "Non renseigné");
 
-  let token = "8595266252:AAFsFaGPr2oxqlKOaP5fJ4VPTMNCLrHZP8o";
-  let chat_id = "8330410504";
+  // ✅ Mets ton token et chat_id ici (évite de le partager)
+  const token = "TON_TOKEN";
+  const chat_id = "TON_CHAT_ID";
 
   fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      chat_id: chat_id,
-      text: message
-    })
+    body: JSON.stringify({ chat_id, text: message })
   });
 
   alert("Commande envoyée !");
   cart = [];
   renderCart();
+  document.getElementById("address").value = "";
+  document.getElementById("snap").value = "";
 }
 
-// VIDEO MODAL
 function showVideo(src) {
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
@@ -344,12 +359,10 @@ function closeVideo() {
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
   player.pause();
+  player.src = "";
   modal.style.display = "none";
 }
 </script>
 
 </body>
 </html>
-
-
-
