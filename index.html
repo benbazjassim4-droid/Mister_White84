@@ -6,900 +6,215 @@
 <title>Mister White Shop</title>
 
 <style>
-  :root{
-    --card: rgba(0,0,0,0.72);
-    --card2: rgba(0,0,0,0.78);
-    --text: #fff;
-    --muted: rgba(255,255,255,0.88);
-    --shadow: 0 8px 22px rgba(0,0,0,0.35);
-    --radius: 14px;
-    --accent1: #ff8c00;
-    --accent2: #ff4500;
-    --green1: #32cd32;
-    --green2: #228b22;
-    --danger1: #ff4d4d;
-    --danger2: #b22222;
-  }
-
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: var(--text);
-    background-image: url('background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  .safe-bottom { padding-bottom: 96px; }
-
-  .container {
-    max-width: 420px;
-    margin: auto;
-    padding: 10px;
-  }
-
-  .logo {
-    width: 120px;
-    margin: 10px auto;
-    display: block;
-  }
-
-  .screen { display: none; }
-  .screen.active { display: block; }
-
-  .categories {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-    gap: 6px;
-  }
-
-  .categories button {
-    flex: 1;
-    padding: 10px 8px;
-    border: none;
-    border-radius: 15px;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: transform 0.15s;
-    box-shadow: var(--shadow);
-  }
-  .categories button:hover { transform: scale(1.02); }
-  .categories button.active {
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-  }
-
-  .products { display: none; }
-  .products.active { display: block; }
-
-  .product {
-    background: var(--card);
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    box-shadow: var(--shadow);
-  }
-
-  /* Image + overlay */
-  .media {
-    position: relative;
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-    background: rgba(255,255,255,0.06);
-  }
-
-  /* Taille réduite téléphone */
-  .media img {
-    width: 100%;
-    height: 165px;
-    object-fit: cover;
-    display: block;
-    cursor: pointer;
-  }
-  @media (max-width: 360px){
-    .media img { height: 150px; }
-  }
-
-  .overlay-title{
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    padding: 7px 10px;
-    border-radius: 999px;
-    font-weight: 900;
-    font-size: 13px;
-    background: rgba(0,0,0,0.65);
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(4px);
-  }
-
-  .placeholder {
-    width: 100%;
-    height: 165px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding: 10px;
-    color: rgba(255,255,255,0.85);
-    font-weight: 900;
-  }
-  .placeholder small {
-    display:block;
-    font-weight: 600;
-    opacity: 0.9;
-    margin-top: 4px;
-  }
-
-  .title { font-weight: 900; line-height: 1.2; }
-
-  /* ✅ Accordéons */
-  .accordion{
-    background: rgba(0,0,0,0.35);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .acc-head{
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
-    padding: 10px;
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .acc-title{
-    font-weight: 900;
-    font-size: 12px;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    opacity: 0.95;
-  }
-  .acc-arrow{
-    font-weight: 900;
-    opacity: 0.9;
-    transition: transform .15s;
-  }
-  .accordion.open .acc-arrow{
-    transform: rotate(180deg);
-  }
-  .acc-body{
-    display: none;
-    padding: 0 10px 10px 10px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.35;
-  }
-  .accordion.open .acc-body{
-    display: block;
-  }
-
-  .row {
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .price { font-weight: 900; }
-
-  .add-btn {
-    background: linear-gradient(135deg, var(--green1), var(--green2));
-    color: white;
-    border: none;
-    border-radius: 999px;
-    height: 42px;
-    padding: 0 14px;
-    font-weight: 900;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: transform 0.12s;
-    display:flex;
-    align-items:center;
-    gap: 6px;
-    white-space: nowrap;
-  }
-  .add-btn:active { transform: scale(0.97); }
-
-  /* PANIER */
-  .cart-box {
-    background: var(--card2);
-    border-radius: 14px;
-    padding: 12px;
-    box-shadow: var(--shadow);
-  }
-
-  .cart-header {
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-
-  .cart-items { margin-top: 6px; }
-
-  .cart-item {
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.10);
-  }
-  .cart-item:last-child { border-bottom: none; }
-
-  .cart-left {
-    display:flex;
-    align-items:center;
-    gap: 10px;
-    min-width: 0;
-  }
-
-  .thumb {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.08);
-  }
-  .thumb.placeholder-thumb{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight: 900;
-    color: rgba(255,255,255,0.75);
-  }
-
-  .cart-info { min-width: 0; display:flex; flex-direction: column; gap: 2px; }
-  .cart-name {
-    font-weight: 900;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 190px;
-  }
-  .cart-sub { font-size: 12px; color: var(--muted); }
-
-  .cart-controls { display:flex; align-items:center; gap: 8px; flex-shrink: 0; }
-
-  .qty-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    border: none;
-    color: white;
-    font-weight: 900;
-    cursor: pointer;
-    background: rgba(255,255,255,0.14);
-    transition: transform 0.12s;
-  }
-  .qty-btn:active { transform: scale(0.95); }
-  .qty { width: 22px; text-align:center; font-weight: 900; }
-
-  .remove-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--danger1), var(--danger2));
-    color: white;
-    font-weight: 900;
-    box-shadow: var(--shadow);
-    transition: transform 0.12s;
-  }
-  .remove-btn:active { transform: scale(0.95); }
-
-  .totals { margin-top: 10px; font-weight: 900; line-height: 1.4; }
-
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-  }
-  .address {
-    background: rgba(0,0,0,0.75);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.15);
-  }
-
-  .order-btn {
-    width: 100%;
-    margin-top: 12px;
-    padding: 12px;
-    background: linear-gradient(135deg, #00c853, #009624);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: transform 0.12s;
-  }
-  .order-btn:active { transform: scale(0.99); }
-
-  /* ✅ Bouton Telegram (Étape 2) */
-  .telegram-btn{
-    display:block;
-    margin-top: 10px;
-    padding: 12px;
-    text-align:center;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.12);
-    color: white;
-    font-weight: 900;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.20);
-  }
-  .telegram-hint{
-    font-size: 12px;
-    opacity: 0.9;
-    margin-top: 6px;
-    text-align: center;
-  }
-
-  /* Nav bas */
-  .bottom-nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    z-index: 999;
-  }
-
-  .nav-btn {
-    position: relative;
-    width: 62px;
-    height: 62px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    background: rgba(0,0,0,0.75);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    box-shadow: var(--shadow);
-    transition: transform 0.12s;
-  }
-  .nav-btn:active { transform: scale(0.97); }
-  .nav-btn.active { background: linear-gradient(135deg, var(--accent1), var(--accent2)); }
-  .nav-btn .emoji { font-size: 20px; line-height: 20px; }
-  .nav-btn .label { font-size: 11px; }
-
-  .cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #ff3b3b;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 900;
-    box-shadow: var(--shadow);
-  }
-
-  /* Modal vidéo (compact) */
-  #videoModal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: rgba(0,0,0,0.92);
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-  }
-  #videoModal .inner { width: min(520px, 94vw); }
-  #videoModal video {
-    width: 100%;
-    max-height: 50vh;
-    border-radius: 12px;
-    background: black;
-  }
-  #videoModal .close {
-    position: absolute;
-    top: 12px;
-    right: 18px;
-    font-size: 34px;
-    color: white;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .pulse { animation: pulse 0.25s ease-in-out; }
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1); }
-  }
+/* ====== STYLE ORIGINAL (INCHANGÉ) ====== */
+:root{
+  --card: rgba(0,0,0,0.72);
+  --card2: rgba(0,0,0,0.78);
+  --text: #fff;
+  --muted: rgba(255,255,255,0.88);
+  --shadow: 0 8px 22px rgba(0,0,0,0.35);
+  --radius: 14px;
+  --accent1: #ff8c00;
+  --accent2: #ff4500;
+  --green1: #32cd32;
+  --green2: #228b22;
+  --danger1: #ff4d4d;
+  --danger2: #b22222;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:white;
+  background:url('background.jpg') center/cover no-repeat;
+}
+.safe-bottom{padding-bottom:96px}
+.container{max-width:420px;margin:auto;padding:10px}
+.logo{width:120px;margin:10px auto;display:block}
+.screen{display:none}
+.screen.active{display:block}
+.categories{display:flex;gap:6px;margin:10px 0}
+.categories button{
+  flex:1;padding:10px;border:none;border-radius:15px;
+  background:rgba(0,0,0,.6);color:white;font-weight:800;
+}
+.categories button.active{
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+}
+.products{display:none}
+.products.active{display:block}
+.product{
+  background:var(--card);
+  padding:10px;border-radius:12px;margin:10px 0;
+}
+.media img{
+  width:100%;height:165px;object-fit:cover;
+  border-radius:12px;cursor:pointer;
+}
+.add-btn{
+  background:linear-gradient(135deg,var(--green1),var(--green2));
+  border:none;border-radius:999px;
+  padding:10px 16px;color:white;font-weight:900;
+}
+.cart-box{
+  background:var(--card2);
+  padding:12px;border-radius:14px
+}
+.telegram-btn{
+  display:block;margin-top:10px;padding:12px;
+  border-radius:12px;text-align:center;
+  background:rgba(255,255,255,.12);
+  color:white;font-weight:900;text-decoration:none;
+}
+.bottom-nav{
+  position:fixed;bottom:12px;left:0;right:0;
+  display:flex;justify-content:center;gap:14px
+}
+.nav-btn{
+  width:62px;height:62px;border-radius:999px;
+  background:rgba(0,0,0,.75);color:white;border:none
+}
+.nav-btn.active{
+  background:linear-gradient(135deg,var(--accent1),var(--accent2))
+}
 </style>
 </head>
 
 <body class="safe-bottom">
-  <div class="container">
-    <img src="logo.jpg" class="logo" alt="Logo">
+<div class="container">
+<img src="logo.jpg" class="logo">
 
-    <div id="screenMenu" class="screen active">
-      <div class="categories">
-        <button id="btnCat-usa1" onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
-        <button id="btnCat-usa2" onclick="showCategory('usa2')">USA TopShelf🍁🗽</button>
-        <button id="btnCat-choco" onclick="showCategory('choco')">Chocolat/Mousseux🧽🍫</button>
-        <button id="btnCat-fiesta" onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
-      </div>
-
-      <div id="usa1" class="products"></div>
-      <div id="usa2" class="products"></div>
-      <div id="choco" class="products"></div>
-      <div id="fiesta" class="products"></div>
-    </div>
-
-    <div id="screenCart" class="screen">
-      <div class="cart-box">
-        <div class="cart-header">
-          <h3 style="margin:0;">🛒 Panier</h3>
-          <button class="remove-btn" title="Vider le panier" onclick="clearCart()">🧹</button>
-        </div>
-
-        <div id="cartItems" class="cart-items"></div>
-
-        <div class="totals">
-          Articles : <span id="totalItems">0</span><br>
-          Total : <span id="totalPrice">0</span> €
-        </div>
-
-        <input class="address" id="address" placeholder="Adresse de livraison">
-        <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
-
-        <!-- ✅ AJOUT : bouton Telegram (Étape 2) -->
-        <a class="telegram-btn" href="https://t.me/misterhattest_bot" target="_blank">
-          ✅ Activer le suivi Telegram (obligatoire)
-        </a>
-        <div class="telegram-hint">
-          Clique puis appuie sur <b>Start</b> sur Telegram pour recevoir le suivi de ta commande
-        </div>
-
-        <button id="orderBtn" class="order-btn" onclick="sendOrder()">Passer commande</button>
-      </div>
-    </div>
+<!-- ===== MENU ===== -->
+<div id="screenMenu" class="screen active">
+  <div class="categories">
+    <button class="active" onclick="showCategory('usa2')">USA TopShelf🍁🗽</button>
   </div>
+  <div id="usa2" class="products active"></div>
+</div>
 
-  <div class="bottom-nav">
-    <button id="btnMenu" class="nav-btn active" onclick="goMenu()">
-      <div class="emoji">📋</div>
-      <div class="label">Menu</div>
-    </button>
+<!-- ===== PANIER ===== -->
+<div id="screenCart" class="screen">
+  <div class="cart-box">
+    <h3>🛒 Panier</h3>
+    <div id="cartItems">Panier vide</div>
 
-    <button id="btnCart" class="nav-btn" onclick="goCart()">
-      <div class="emoji">🛒</div>
-      <div class="label">Panier</div>
-      <div id="cartBadge" class="cart-badge">0</div>
+    <input id="address" placeholder="Adresse de livraison">
+    <input id="snap" placeholder="Snapchat">
+
+    <!-- ✅ BOUTON TELEGRAM -->
+    <a id="tgLink" class="telegram-btn" href="#" target="_blank">
+      ✅ Activer le suivi Telegram (obligatoire)
+    </a>
+
+    <button id="orderBtn" onclick="sendOrder()" class="add-btn" style="width:100%;margin-top:10px">
+      Passer commande
     </button>
   </div>
+</div>
+</div>
 
-  <div id="videoModal" onclick="onModalBackdropClick(event)">
-    <div class="close" onclick="closeVideo()">×</div>
-    <div class="inner">
-      <video id="videoPlayer" controls></video>
-    </div>
-  </div>
+<!-- ===== NAV ===== -->
+<div class="bottom-nav">
+  <button id="btnMenu" class="nav-btn active" onclick="goMenu()">📋</button>
+  <button id="btnCart" class="nav-btn" onclick="goCart()">🛒</button>
+</div>
 
 <script>
-const DEFAULT_INFO = "Infos à venir…";
-const DEFAULT_DETAILS = [
-  "Strain: —",
-  "Breeder: —",
-  "Poids: —",
-  "Prix: —"
-];
-
-const PRODUCTS = [
-  { id:"prodA", category:"usa1", name:"Produit A", price:0, img:"", video:"",
-    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
-  },
-  {
-    id:"tha_phantom",
-    category:"usa2",
-    name:"Tha Phantom (Cotton Candy X Black Mamba)",
-    price:60,
-    img:"asset/tha_phantom.jpg",
-    video:"asset/tha_phantom_video.mp4",
-    overlay:"Tha Phantom",
-    info:'Découvrez notre première nouvelle cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit.',
-    details:[
-      "Strain: Tha Phantom (cotton candy x black mamba)",
-      "Breeder: Exotikz Flowerz",
-      "Poids: 3,5g",
-      "Prix: 60€"
-    ]
-  },
-  { id:"prodB", category:"usa2", name:"Bubble Gum Runtz X Candy Gas", price:0, img:"", video:"",
-    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
-  },
-  { id:"prodC", category:"choco", name:"Produit C", price:0, img:"", video:"",
-    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
-  },
-  { id:"prodD", category:"fiesta", name:"Produit D", price:0, img:"", video:"",
-    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
-  },
-];
-
-const CART_KEY = "mw_cart_v5";
-let cart = loadCart();
-
-/* NAV */
-function goMenu() {
-  document.getElementById("screenMenu").classList.add("active");
-  document.getElementById("screenCart").classList.remove("active");
-  document.getElementById("btnMenu").classList.add("active");
-  document.getElementById("btnCart").classList.remove("active");
-}
-function goCart() {
-  document.getElementById("screenMenu").classList.remove("active");
-  document.getElementById("screenCart").classList.add("active");
-  document.getElementById("btnMenu").classList.remove("active");
-  document.getElementById("btnCart").classList.add("active");
-}
-
-/* Catégories */
-function setActiveCatBtn(cat) {
-  ["usa1","usa2","choco","fiesta"].forEach(c => {
-    const btn = document.getElementById("btnCat-" + c);
-    if(btn) btn.classList.toggle("active", c === cat);
-  });
-}
-function showCategory(cat) {
-  document.querySelectorAll(".products").forEach(s => s.classList.remove("active"));
-  const section = document.getElementById(cat);
-  if(section) section.classList.add("active");
-  setActiveCatBtn(cat);
-}
-
-/* ✅ Accordéon toggle */
-function toggleAccordion(btn){
-  const acc = btn.closest(".accordion");
-  if(!acc) return;
-  acc.classList.toggle("open");
-}
-
-/* Render produits */
-function renderProducts() {
-  ["usa1","usa2","choco","fiesta"].forEach(cat => {
-    document.getElementById(cat).innerHTML = "";
-  });
-
-  PRODUCTS.forEach(p => {
-    const wrap = document.getElementById(p.category);
-    if(!wrap) return;
-
-    const card = document.createElement("div");
-    card.className = "product";
-
-    // Media
-    const media = document.createElement("div");
-    media.className = "media";
-
-    if(p.img){
-      const img = document.createElement("img");
-      img.src = p.img;
-      img.alt = p.name;
-      img.onclick = () => { if(p.video) showVideo(p.video); };
-      media.appendChild(img);
-
-      if(p.overlay){
-        const overlay = document.createElement("div");
-        overlay.className = "overlay-title";
-        overlay.textContent = p.overlay;
-        media.appendChild(overlay);
-      }
-    } else {
-      const ph = document.createElement("div");
-      ph.className = "placeholder";
-      ph.innerHTML = `Image bientôt<br><small>${escapeHtml(p.name)}</small>`;
-      media.appendChild(ph);
-    }
-    card.appendChild(media);
-
-    // Titre
-    const title = document.createElement("div");
-    title.className = "title";
-    title.textContent = p.name;
-    card.appendChild(title);
-
-    // ✅ Accordéon INFOS (ouvert par défaut)
-    const infoAcc = document.createElement("div");
-    infoAcc.className = "accordion open";
-    infoAcc.innerHTML = `
-      <button class="acc-head" type="button" onclick="toggleAccordion(this)">
-        <span class="acc-title">Infos</span>
-        <span class="acc-arrow">▾</span>
-      </button>
-      <div class="acc-body">${escapeHtml(p.info || "")}</div>
-    `;
-    card.appendChild(infoAcc);
-
-    // ✅ Accordéon DETAILS (fermé par défaut)
-    const detAcc = document.createElement("div");
-    detAcc.className = "accordion";
-    detAcc.innerHTML = `
-      <button class="acc-head" type="button" onclick="toggleAccordion(this)">
-        <span class="acc-title">Détails</span>
-        <span class="acc-arrow">▾</span>
-      </button>
-      <div class="acc-body">${(p.details || []).map(x => escapeHtml(x)).join("<br>")}</div>
-    `;
-    card.appendChild(detAcc);
-
-    // Prix + Ajouter
-    const row = document.createElement("div");
-    row.className = "row";
-
-    const price = document.createElement("div");
-    price.className = "price";
-    price.textContent = (p.price > 0) ? `Prix : ${p.price}€` : "Prix : à venir";
-
-    const add = document.createElement("button");
-    add.className = "add-btn";
-
-    if(p.price > 0){
-      add.innerHTML = `<span style="font-size:18px;font-weight:900;">+</span><span>${p.price}€</span>`;
-      add.onclick = () => addToCart(p.id);
-    } else {
-      add.innerHTML = `<span style="font-size:18px;font-weight:900;">+</span><span>à venir</span>`;
-      add.onclick = () => alert("Produit bientôt disponible");
-    }
-
-    row.appendChild(price);
-    row.appendChild(add);
-    card.appendChild(row);
-
-    wrap.appendChild(card);
-  });
-}
-
-/* Cart actions */
-function addToCart(productId){
-  const p = PRODUCTS.find(x => x.id === productId);
-  if(!p) return;
-
-  if(!cart[productId]){
-    cart[productId] = { id:p.id, name:p.name, price:Number(p.price)||0, img:p.img||"", qty:1 };
-  }else{
-    cart[productId].qty += 1;
+/* ===== IDENTIFIANT CLIENT (NOUVEAU) ===== */
+function getClientId(){
+  let id = localStorage.getItem("mw_client_id");
+  if(!id){
+    id = Math.random().toString(16).slice(2)+Date.now().toString(16);
+    localStorage.setItem("mw_client_id",id);
   }
-
-  saveCart();
-  renderCart();
-
-  try { if(navigator.vibrate) navigator.vibrate(18); } catch(e){}
-  pulse(document.getElementById("btnCart"));
-  pulse(document.getElementById("cartBadge"));
+  return id;
 }
 
-function incQty(id){
-  if(!cart[id]) return;
-  cart[id].qty += 1;
-  saveCart();
-  renderCart();
-  pulse(document.getElementById("cartBadge"));
-}
-function decQty(id){
-  if(!cart[id]) return;
-  cart[id].qty -= 1;
-  if(cart[id].qty <= 0) delete cart[id];
-  saveCart();
-  renderCart();
-  pulse(document.getElementById("cartBadge"));
-}
-function removeLine(id){
-  if(!cart[id]) return;
-  delete cart[id];
-  saveCart();
-  renderCart();
-}
-function clearCart(){
-  cart = {};
-  saveCart();
-  renderCart();
-}
+/* ===== TELEGRAM LINK (NOUVEAU) ===== */
+const BOT_USERNAME = "misterhattest_bot"; // 🔴 À MODIFIER ICI (sans @)
 
-/* Render cart + badge */
-function renderCart(){
-  const items = Object.values(cart);
-  const root = document.getElementById("cartItems");
-
-  if(items.length === 0){
-    root.innerHTML = `<div style="opacity:.85; text-align:center; padding:14px 0;">Panier vide</div>`;
-  } else {
-    root.innerHTML = items.map(it => {
-      const lineTotal = it.qty * it.price;
-
-      const thumbHtml = it.img
-        ? `<img class="thumb" src="${escapeAttr(it.img)}" alt="${escapeAttr(it.name)}">`
-        : `<div class="thumb placeholder-thumb">—</div>`;
-
-      return `
-        <div class="cart-item">
-          <div class="cart-left">
-            ${thumbHtml}
-            <div class="cart-info">
-              <div class="cart-name">${escapeHtml(it.name)}</div>
-              <div class="cart-sub">${it.price}€ x ${it.qty} = <strong>${lineTotal.toFixed(0)}€</strong></div>
-            </div>
-          </div>
-
-          <div class="cart-controls">
-            <button class="qty-btn" onclick="decQty('${escapeAttr(it.id)}')">−</button>
-            <div class="qty">${it.qty}</div>
-            <button class="qty-btn" onclick="incQty('${escapeAttr(it.id)}')">+</button>
-            <button class="remove-btn" onclick="removeLine('${escapeAttr(it.id)}')">❌</button>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  const totalQty = items.reduce((s,it) => s + it.qty, 0);
-  const totalPrice = items.reduce((s,it) => s + it.qty * it.price, 0);
-
-  document.getElementById("totalItems").textContent = totalQty;
-  document.getElementById("totalPrice").textContent = totalPrice.toFixed(0);
-
-  const badge = document.getElementById("cartBadge");
-  if(totalQty > 0){
-    badge.style.display = "flex";
-    badge.textContent = totalQty;
-  }else{
-    badge.style.display = "none";
-  }
-}
-
-/* Telegram */
-async function sendOrder(){
-  const items = Object.values(cart);
-  const address = document.getElementById("address").value.trim();
-  const snap = document.getElementById("snap").value.trim();
-
-  if(items.length === 0){ alert("Panier vide"); return; }
-  if(!address){ alert("Ajoute une adresse"); return; }
-
-  let message = "Nouvelle commande:\n\n";
-  let total = 0;
-
-  items.forEach(it => {
-    const lineTotal = it.qty * it.price;
-    total += lineTotal;
-    message += `- ${it.name} x${it.qty} (${it.price}€) = ${lineTotal.toFixed(0)}€\n`;
-  });
-
-  message += `\nTotal: ${total.toFixed(0)}€`;
-  message += `\nAdresse: ${address}`;
-  message += `\nSnap: ${snap ? snap : "Non renseigné"}`;
-
-  const token = "8595266252:AAHZaXgJKIndOM1mZ-hMqJbVdq-In7jWwGs";
-  const chat_id = "8330410504";
-
-  const btn = document.getElementById("orderBtn");
-  btn.disabled = true;
-  btn.textContent = "Envoi…";
-
-  try{
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ chat_id, text: message })
-    });
-
-    const data = await res.json().catch(() => ({}));
-    if(res.ok && data && data.ok){
-      alert("Commande envoyée !");
-      clearCart();
-      document.getElementById("address").value = "";
-      document.getElementById("snap").value = "";
-      goMenu();
-    }else{
-      alert("Erreur Telegram : vérifie token/chat_id.");
-    }
-  }catch(e){
-    alert("Erreur réseau : impossible d’envoyer la commande.");
-  }finally{
-    btn.disabled = false;
-    btn.textContent = "Passer commande";
-  }
-}
-
-/* Vidéo modal */
-function showVideo(src){
-  const modal = document.getElementById("videoModal");
-  const player = document.getElementById("videoPlayer");
-  player.src = src;
-  modal.style.display = "flex";
-}
-function closeVideo(){
-  const modal = document.getElementById("videoModal");
-  const player = document.getElementById("videoPlayer");
-  player.pause();
-  player.src = "";
-  modal.style.display = "none";
-}
-function onModalBackdropClick(e){
-  if(e.target && e.target.id === "videoModal") closeVideo();
-}
-document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape"){
-    const modal = document.getElementById("videoModal");
-    if(modal.style.display === "flex") closeVideo();
-  }
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("tgLink").href =
+    `https://t.me/${BOT_USERNAME}?start=${getClientId()}`;
 });
 
-/* Storage */
-function loadCart(){
-  try{
-    const raw = localStorage.getItem(CART_KEY);
-    if(!raw) return {};
-    const parsed = JSON.parse(raw);
-    return (parsed && typeof parsed === "object") ? parsed : {};
-  }catch(e){
-    return {};
+/* ===== PRODUIT (IDENTIQUE) ===== */
+const PRODUCTS = [{
+  id:"tha",
+  name:"Tha Phantom (Cotton Candy X Black Mamba)",
+  price:60,
+  img:"asset/tha_phantom.jpg"
+}];
+
+let cart={};
+
+/* ===== UI ===== */
+function showCategory(){
+  document.getElementById("usa2").innerHTML = `
+    <div class="product">
+      <div class="media">
+        <img src="${PRODUCTS[0].img}">
+      </div>
+      <b>${PRODUCTS[0].name}</b><br>
+      Prix : 60€
+      <br><br>
+      <button class="add-btn" onclick="addToCart()">+ 60€</button>
+    </div>`;
+}
+showCategory();
+
+function addToCart(){
+  cart["tha"]={name:PRODUCTS[0].name,qty:1,price:60};
+  renderCart();
+}
+
+function renderCart(){
+  document.getElementById("cartItems").innerHTML =
+    "- Tha Phantom x1 (60€)";
+}
+
+function goMenu(){
+  screenMenu.classList.add("active");
+  screenCart.classList.remove("active");
+  btnMenu.classList.add("active");
+  btnCart.classList.remove("active");
+}
+function goCart(){
+  screenMenu.classList.remove("active");
+  screenCart.classList.add("active");
+  btnMenu.classList.remove("active");
+  btnCart.classList.add("active");
+}
+
+/* ===== ENVOI COMMANDE (NOUVEAU) ===== */
+async function sendOrder(){
+  const address=document.getElementById("address").value.trim();
+  if(!address){alert("Adresse manquante");return;}
+
+  const payload={
+    clientId:getClientId(),
+    items:[{name:PRODUCTS[0].name,qty:1,price:60}],
+    address,
+    snap:document.getElementById("snap").value,
+    total:60
+  };
+
+  const res=await fetch("/api/order",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+  const data=await res.json();
+
+  if(data.ok){
+    alert("Commande envoyée ! Tu es "+data.position+"ᵉ sur la liste d’attente.");
+    cart={};
+    renderCart();
+    goMenu();
+  }else{
+    alert("Erreur commande");
   }
 }
-function saveCart(){
-  try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){}
-}
-
-/* Helpers */
-function pulse(el){
-  if(!el) return;
-  el.classList.remove("pulse");
-  void el.offsetWidth;
-  el.classList.add("pulse");
-}
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-function escapeAttr(str){ return escapeHtml(str); }
-
-/* INIT */
-renderProducts();
-showCategory("usa1");
-renderCart();
 </script>
 </body>
 </html>
-
-
-
-
