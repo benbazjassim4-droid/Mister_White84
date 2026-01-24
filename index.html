@@ -166,6 +166,16 @@ input, textarea {
 <script>
 let cart = [];
 
+// --- PRIX ET TOTAL ---
+let prices = {
+  "Weed OG": 10,
+  "Weed Premium": 15,
+  "Choco Space": 8,
+  "Pack Fiesta": 20
+};
+
+let total = 0;
+
 function showCategory(cat) {
   document.querySelectorAll('.products').forEach(p => p.style.display = "none");
   document.getElementById(cat).style.display = "block";
@@ -173,6 +183,13 @@ function showCategory(cat) {
 
 function addToCart(item) {
   cart.push(item);
+  total += prices[item]; // ajouter au total
+  renderCart();
+}
+
+function removeItem(i) {
+  total -= prices[cart[i]]; // retirer du total
+  cart.splice(i,1);
   renderCart();
 }
 
@@ -180,16 +197,12 @@ function renderCart() {
   let html = "";
   cart.forEach((item, i) => {
     html += `<div class="cart-item">
-      ${item}
+      ${item} - ${prices[item]}€
       <button onclick="removeItem(${i})">❌</button>
     </div>`;
   });
+  html += `<div class="cart-item"><strong>Total: ${total} €</strong></div>`;
   document.getElementById("cartItems").innerHTML = html;
-}
-
-function removeItem(i) {
-  cart.splice(i,1);
-  renderCart();
 }
 
 function sendOrder() {
@@ -202,7 +215,8 @@ function sendOrder() {
   }
 
   let message = "Nouvelle commande:\n\n";
-  cart.forEach(i => message += "- " + i + "\n");
+  cart.forEach(i => message += "- " + i + " - " + prices[i] + "€\n");
+  message += "\nTotal: " + total + "€";
   message += "\nAdresse: " + address;
   message += "\nSnap: " + snap;
 
@@ -220,6 +234,7 @@ function sendOrder() {
 
   alert("Commande envoyée !");
   cart = [];
+  total = 0;
   renderCart();
 }
 </script>
