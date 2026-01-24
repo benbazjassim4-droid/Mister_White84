@@ -36,15 +36,24 @@ body {
   margin: 10px 0;
 }
 
+/* Boutons catégories améliorés */
 .categories button {
   flex: 1;
   margin: 2px;
-  padding: 8px;
+  padding: 10px;
   border: none;
-  border-radius: 10px;
-  background: rgba(0,0,0,0.7);
+  border-radius: 15px;
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
   color: white;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.categories button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Products */
@@ -59,6 +68,24 @@ body {
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
+}
+
+/* Boutons ajouter au panier "+" */
+.product button {
+  background: linear-gradient(135deg, #32cd32, #228b22);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product button:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Panier */
@@ -84,6 +111,23 @@ body {
   margin: 3px 0;
 }
 
+/* Bouton supprimer du panier ❌ */
+.cart-item button {
+  background: linear-gradient(135deg, #ff4d4d, #b22222);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cart-item button:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
 input, textarea {
   width: 100%;
   padding: 8px;
@@ -97,15 +141,22 @@ input, textarea {
   color: white;
 }
 
+/* Bouton passer commande */
 .order-btn {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  background: green;
+  background: linear-gradient(135deg, #00c853, #009624);
   border: none;
   border-radius: 10px;
   color: white;
   font-size: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.order-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 </style>
 </head>
@@ -129,10 +180,15 @@ input, textarea {
     </div>
   </div>
 
+  <!-- USA TopShelf avec les deux nouveaux produits -->
   <div id="usa2" class="products">
     <div class="product">
-      <span>Weed Premium</span>
-      <button onclick="addToCart('Weed Premium')">+</button>
+      <span>Tha Phantom (Cotton Candy X Black Mamba)</span>
+      <button onclick="addToCart('Tha Phantom (Cotton Candy X Black Mamba)')">+</button>
+    </div>
+    <div class="product">
+      <span>Bubble Gum Runtz X Candy Gas</span>
+      <button onclick="addToCart('Bubble Gum Runtz X Candy Gas')">+</button>
     </div>
   </div>
 
@@ -160,21 +216,14 @@ input, textarea {
 
   <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
 
+  <!-- TOTAL -->
+  <h4>Total: <span id="totalItems">0</span> article(s)</h4>
+
   <button class="order-btn" onclick="sendOrder()">Passer commande</button>
 </div>
 
 <script>
 let cart = [];
-
-// --- PRIX ET TOTAL ---
-let prices = {
-  "Weed OG": 10,
-  "Weed Premium": 15,
-  "Choco Space": 8,
-  "Pack Fiesta": 20
-};
-
-let total = 0;
 
 function showCategory(cat) {
   document.querySelectorAll('.products').forEach(p => p.style.display = "none");
@@ -183,13 +232,6 @@ function showCategory(cat) {
 
 function addToCart(item) {
   cart.push(item);
-  total += prices[item]; // ajouter au total
-  renderCart();
-}
-
-function removeItem(i) {
-  total -= prices[cart[i]]; // retirer du total
-  cart.splice(i,1);
   renderCart();
 }
 
@@ -197,12 +239,19 @@ function renderCart() {
   let html = "";
   cart.forEach((item, i) => {
     html += `<div class="cart-item">
-      ${item} - ${prices[item]}€
+      ${item}
       <button onclick="removeItem(${i})">❌</button>
     </div>`;
   });
-  html += `<div class="cart-item"><strong>Total: ${total} €</strong></div>`;
   document.getElementById("cartItems").innerHTML = html;
+
+  // Total dynamique
+  document.getElementById("totalItems").innerText = cart.length;
+}
+
+function removeItem(i) {
+  cart.splice(i,1);
+  renderCart();
 }
 
 function sendOrder() {
@@ -215,8 +264,7 @@ function sendOrder() {
   }
 
   let message = "Nouvelle commande:\n\n";
-  cart.forEach(i => message += "- " + i + " - " + prices[i] + "€\n");
-  message += "\nTotal: " + total + "€";
+  cart.forEach(i => message += "- " + i + "\n");
   message += "\nAdresse: " + address;
   message += "\nSnap: " + snap;
 
@@ -234,7 +282,6 @@ function sendOrder() {
 
   alert("Commande envoyée !");
   cart = [];
-  total = 0;
   renderCart();
 }
 </script>
