@@ -785,52 +785,59 @@ function renderCart(){
 
 /* Telegram */
 async function sendOrder(){
-  const items = Object.values(cart);
+  const items = Object.values(cart || {});
   const address = document.getElementById("address").value.trim();
   const snap = document.getElementById("snap").value.trim();
 
-  if(items.length === 0){ alert("Panier vide"); return; }
-  if(!address){ alert("Ajoute une adresse"); return; }
+  if(items.length === 0){
+    alert("Panier vide");
+    return;
+  }
+  if(!address){
+    alert("Ajoute une adresse");
+    return;
+  }
 
-  let message = "Nouvelle commande:\n\n";
-  let total = 0;
+  const clientId = getClientId();
+  const total = items.reduce((sum, it) => sum + (Number(it.price)||0) * (Number(it.qty)||1), 0);
 
-  items.forEach(it => {
-    const lineTotal = it.qty * it.price;
-    total += lineTotal;
-    message += `- ${it.name} x${it.qty} (${it.price}€) = ${lineTotal.toFixed(0)}€\n`;
-  });
-
-  message += `\nTotal: ${total.toFixed(0)}€`;
-  message += `\nAdresse: ${address}`;
-  message += `\nSnap: ${snap ? snap : "Non renseigné"}`;
-
-  const token = "8595266252:AAHZaXgJKIndOM1mZ-hMqJbVdq-In7jWwGs";
-  const chat_id = "8330410504";
+  const payload = {
+    clientId,
+    items: items.map(it => ({
+      name: it.name,
+      qty: it.qty || 1,
+      price: Number(it.price) || 0
+    })),
+    address,
+    snap,
+    total
+  };
 
   const btn = document.getElementById("orderBtn");
   btn.disabled = true;
   btn.textContent = "Envoi…";
 
   try{
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const res = await fetch("/api/order", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ chat_id, text: message })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
     });
 
     const data = await res.json().catch(() => ({}));
-    if(res.ok && data && data.ok){
-      alert("Commande envoyée !");
+
+    if(res.ok && data.ok){
+      alert(`Commande envoyée ! Tu es ${data.position}ᵉ sur la liste d’attente.`);
+
       clearCart();
       document.getElementById("address").value = "";
       document.getElementById("snap").value = "";
       goMenu();
     }else{
-      alert("Erreur Telegram : vérifie token/chat_id.");
+      alert("Erreur : commande non envoyée");
     }
   }catch(e){
-    alert("Erreur réseau : impossible d’envoyer la commande.");
+    alert("Erreur réseau");
   }finally{
     btn.disabled = false;
     btn.textContent = "Passer commande";
@@ -913,6 +920,7 @@ renderCart();
 </script>
 </body>
 </html>
+
 
 
 
