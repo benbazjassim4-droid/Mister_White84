@@ -16,6 +16,11 @@ body {
   background-repeat: no-repeat;
 }
 
+/* Pour laisser de la place à la barre du bas */
+.safe-bottom {
+  padding-bottom: 90px;
+}
+
 .container {
   max-width: 420px;
   margin: auto;
@@ -29,6 +34,14 @@ body {
   display: block;
 }
 
+/* Sections (Menu / Panier) */
+.screen {
+  display: none;
+}
+.screen.active {
+  display: block;
+}
+
 /* Categories */
 .categories {
   display: flex;
@@ -36,7 +49,7 @@ body {
   margin: 10px 0;
 }
 
-/* Boutons catégories améliorés */
+/* Boutons catégories */
 .categories button {
   flex: 1;
   margin: 2px;
@@ -60,10 +73,9 @@ body {
   display: none;
 }
 
-/* Produit “carte” */
 .product {
   background: rgba(0,0,0,0.7);
-  margin: 5px 0;
+  margin: 8px 0;
   padding: 10px;
   border-radius: 10px;
   display: flex;
@@ -79,7 +91,7 @@ body {
 }
 
 /* Bouton + */
-.product button.add-btn {
+.add-btn {
   align-self: flex-end;
   background: linear-gradient(135deg, #32cd32, #228b22);
   color: white;
@@ -91,27 +103,16 @@ body {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.product button.add-btn:hover {
+.add-btn:hover {
   transform: scale(1.15);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Panier */
-.cart {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: black;
-  padding: 10px;
-  max-height: 40%;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-
-.cart h3 {
-  margin: 5px 0;
-  text-align: center;
+/* PANIER (écran) */
+.cart-box {
+  background: rgba(0,0,0,0.75);
+  border-radius: 14px;
+  padding: 12px;
 }
 
 .cart-item {
@@ -119,11 +120,11 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  margin: 6px 0;
+  margin: 8px 0;
 }
 
 /* Bouton supprimer ❌ */
-.cart-item button.remove-btn {
+.remove-btn {
   background: linear-gradient(135deg, #ff4d4d, #b22222);
   color: white;
   border: none;
@@ -133,16 +134,16 @@ body {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.cart-item button.remove-btn:hover {
+.remove-btn:hover {
   transform: scale(1.15);
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 input {
   width: 100%;
-  padding: 8px;
-  margin-top: 6px;
-  border-radius: 8px;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 10px;
   border: none;
   box-sizing: border-box;
 }
@@ -153,14 +154,14 @@ input {
   border: 1px solid rgba(255,255,255,0.15);
 }
 
-/* Bouton passer commande */
+/* Bouton commander */
 .order-btn {
   width: 100%;
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 12px;
+  padding: 12px;
   background: linear-gradient(135deg, #00c853, #009624);
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -171,11 +172,57 @@ input {
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+/* Barre nav du bas */
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  z-index: 999;
+}
+
+.nav-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: rgba(0,0,0,0.75);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform 0.15s;
+}
+
+.nav-btn:active {
+  transform: scale(0.96);
+}
+
+.nav-btn .emoji {
+  font-size: 20px;
+  line-height: 20px;
+}
+.nav-btn .label {
+  font-size: 11px;
+}
+
+/* Bouton actif */
+.nav-btn.active {
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+}
+
 /* Modal vidéo */
 #videoModal {
   display: none;
   position: fixed;
-  z-index: 999;
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
@@ -203,81 +250,105 @@ input {
 </style>
 </head>
 
-<body>
+<body class="safe-bottom">
 
 <div class="container">
+
   <img src="logo.jpg" class="logo">
 
-  <div class="categories">
-    <button onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
-    <button onclick="showCategory('usa2')">USA TopShelf🍁🗽</button>
-    <button onclick="showCategory('choco')">Chocolat/Mousseux🧽🍫</button>
-    <button onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
-  </div>
+  <!-- ÉCRAN 1 : MENU -->
+  <div id="screenMenu" class="screen active">
+    <div class="categories">
+      <button onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
+      <button onclick="showCategory('usa2')">USA TopShelf🍁🗽</button>
+      <button onclick="showCategory('choco')">Chocolat/Mousseux🧽🍫</button>
+      <button onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
+    </div>
 
-  <!-- Catégorie 1 (exemple neutre) -->
-  <div id="usa1" class="products">
-    <div class="product">
-      <strong>Produit A</strong>
-      <small>Description courte…</small>
-      <button class="add-btn" onclick="addToCart('Produit A')">+</button>
+    <!-- Mets ici tes produits (légalement) -->
+    <div id="usa1" class="products">
+      <div class="product">
+        <strong>Produit A</strong>
+        <small>Description…</small>
+        <button class="add-btn" onclick="addToCart('Produit A')">+</button>
+      </div>
+    </div>
+
+    <!-- TopShelf avec photo + vidéo (clique l’image) -->
+    <div id="usa2" class="products">
+      <div class="product">
+        <img
+          src="asset/tha_phantom.jpg"
+          alt="Tha Phantom"
+          onclick="showVideo('asset/tha_phantom_video.mp4')"
+        >
+        <strong>Tha Phantom (Cotton Candy X Black Mamba)</strong>
+        <small>
+          Découvrez notre première nouvelle Cali, "Tha Phantom".
+          Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit 😝
+        </small>
+        <strong>Prix : 60€</strong>
+        <button class="add-btn" onclick="addToCart('Tha Phantom (Cotton Candy X Black Mamba)')">+</button>
+      </div>
+
+      <div class="product">
+        <strong>Bubble Gum Runtz X Candy Gas</strong>
+        <small>Description à venir…</small>
+        <button class="add-btn" onclick="addToCart('Bubble Gum Runtz X Candy Gas')">+</button>
+      </div>
+    </div>
+
+    <div id="choco" class="products">
+      <div class="product">
+        <strong>Produit C</strong>
+        <small>Description…</small>
+        <button class="add-btn" onclick="addToCart('Produit C')">+</button>
+      </div>
+    </div>
+
+    <div id="fiesta" class="products">
+      <div class="product">
+        <strong>Produit D</strong>
+        <small>Description…</small>
+        <button class="add-btn" onclick="addToCart('Produit D')">+</button>
+      </div>
     </div>
   </div>
 
-  <!-- Catégorie 2 : 1er produit avec image + vidéo au clic -->
-  <div id="usa2" class="products">
-    <div class="product">
-      <img
-        src="asset/tha_phantom.jpg"
-        alt="Produit vedette"
-        onclick="showVideo('asset/tha_phantom_video.mp4')"
-      >
-      <strong>Tha Phantom (Cotton Candy X Black Mamba)</strong>
-      <small>Découvrez notre première nouvelle Cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit😝</small>
-      <strong>Prix : 60€</strong>
-      <button class="add-btn" onclick="addToCart('Tha Phantom (Cotton Candy X Black Mamba)')">+</button>
-    </div>
+  <!-- ÉCRAN 2 : PANIER -->
+  <div id="screenCart" class="screen">
+    <div class="cart-box">
+      <h3 style="margin:0 0 8px 0; text-align:center;">🛒 Panier</h3>
 
-    <div class="product">
-      <strong>Bubble Gum Runtz X Candy Gas</strong>
-      <small>Description à venir…</small>
-      <button class="add-btn" onclick="addToCart('Bubble Gum Runtz X Candy Gas')">+</button>
+      <div id="cartItems"></div>
+
+      <div style="margin-top:10px; font-weight:bold;">
+        Total : <span id="totalItems">0</span> article(s)
+      </div>
+
+      <input class="address" id="address" placeholder="Adresse de livraison">
+      <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
+
+      <button class="order-btn" onclick="sendOrder()">Passer commande</button>
     </div>
   </div>
 
-  <!-- Catégorie 3 (exemple neutre) -->
-  <div id="choco" class="products">
-    <div class="product">
-      <strong>Produit C</strong>
-      <small>Description courte…</small>
-      <button class="add-btn" onclick="addToCart('Produit C')">+</button>
-    </div>
-  </div>
-
-  <!-- Catégorie 4 (exemple neutre) -->
-  <div id="fiesta" class="products">
-    <div class="product">
-      <strong>Produit D</strong>
-      <small>Description courte…</small>
-      <button class="add-btn" onclick="addToCart('Produit D')">+</button>
-    </div>
-  </div>
 </div>
 
-<!-- PANIER -->
-<div class="cart">
-  <h3>🛒 Panier</h3>
-  <div id="cartItems"></div>
+<!-- NAV BAR (2 ronds) -->
+<div class="bottom-nav">
+  <button id="btnMenu" class="nav-btn active" onclick="goMenu()">
+    <div class="emoji">📋</div>
+    <div class="label">Menu</div>
+  </button>
 
-  <input class="address" id="address" placeholder="Adresse de livraison">
-  <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
-
-  <h4>Total : <span id="totalItems">0</span> article(s)</h4>
-
-  <button class="order-btn" onclick="sendOrder()">Passer commande</button>
+  <button id="btnCart" class="nav-btn" onclick="goCart()">
+    <div class="emoji">🛒</div>
+    <div class="label">Panier</div>
+  </button>
 </div>
 
-<!-- MODAL VIDEO -->
+<!-- MODAL VIDÉO -->
 <div id="videoModal">
   <div class="close" onclick="closeVideo()">×</div>
   <video id="videoPlayer" controls></video>
@@ -286,14 +357,31 @@ input {
 <script>
 let cart = [];
 
+function goMenu() {
+  document.getElementById("screenMenu").classList.add("active");
+  document.getElementById("screenCart").classList.remove("active");
+  document.getElementById("btnMenu").classList.add("active");
+  document.getElementById("btnCart").classList.remove("active");
+}
+
+function goCart() {
+  document.getElementById("screenMenu").classList.remove("active");
+  document.getElementById("screenCart").classList.add("active");
+  document.getElementById("btnMenu").classList.remove("active");
+  document.getElementById("btnCart").classList.add("active");
+}
+
+/* Catégories */
 function showCategory(cat) {
   document.querySelectorAll('.products').forEach(p => p.style.display = "none");
   document.getElementById(cat).style.display = "block";
 }
 
+/* Panier */
 function addToCart(item) {
   cart.push(item);
   renderCart();
+  // petit confort: quand on ajoute, on peut rester sur menu
 }
 
 function renderCart() {
@@ -313,6 +401,7 @@ function removeItem(i) {
   renderCart();
 }
 
+/* Commande */
 function sendOrder() {
   const address = document.getElementById("address").value.trim();
   const snap = document.getElementById("snap").value.trim();
@@ -331,7 +420,7 @@ function sendOrder() {
   message += "\nAdresse: " + address;
   message += "\nSnap: " + (snap ? snap : "Non renseigné");
 
-  // ✅ Mets ton token et chat_id ici (évite de le partager)
+  // ⚠️ Mets tes infos ici en privé (évite de les partager)
   const token = "TON_TOKEN";
   const chat_id = "TON_CHAT_ID";
 
@@ -346,8 +435,10 @@ function sendOrder() {
   renderCart();
   document.getElementById("address").value = "";
   document.getElementById("snap").value = "";
+  goMenu();
 }
 
+/* Vidéo */
 function showVideo(src) {
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
@@ -362,6 +453,10 @@ function closeVideo() {
   player.src = "";
   modal.style.display = "none";
 }
+
+/* Au chargement : on cache tout, et on peut choisir une catégorie par défaut */
+showCategory('usa1');
+renderCart();
 </script>
 
 </body>
