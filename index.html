@@ -1,229 +1,70 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mister White Shop</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  color: white;
-  background-image: url('background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.container {
-  max-width: 420px;
-  margin: auto;
-  padding: 10px;
-}
-
-/* Logo */
-.logo {
-  width: 120px;
-  margin: 10px auto;
-  display: block;
-}
-
-/* Categories */
-.categories {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-}
-
-.categories button {
-  flex: 1;
-  margin: 2px;
-  padding: 8px;
-  border: none;
-  border-radius: 10px;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  font-size: 11px;
-}
-
-/* Products */
-.products {
-  display: none;
-}
-
-.product {
-  background: rgba(0,0,0,0.7);
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-/* Panier */
-.cart {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: black;
-  padding: 10px;
-  max-height: 40%;
-  overflow-y: auto;
-}
-
-.cart h3 {
-  margin: 5px 0;
-  text-align: center;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  margin: 3px 0;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 8px;
-  border: none;
-}
-
-.address {
-  background: black;
-  color: white;
-}
-
-.order-btn {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  background: green;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Mini Shop</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .product {
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid white;
+      border-radius: 10px;
+    }
+    button {
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      background: green;
+      color: white;
+      font-size: 16px;
+    }
+    #cart {
+      margin-top: 30px;
+      border-top: 2px solid white;
+      padding-top: 20px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-  <img src="logo.jpg" class="logo">
+<h1>🛒 Mini Shop</h1>
 
-  <div class="categories">
-    <button onclick="showCategory('usa1')">USA MiddleShelf🍁🗽</button>
-    <button onclick="showCategory('usa2')">USA TopShelf🍁🗽</button>
-    <button onclick="showCategory('choco')">Chocolat/Mousseux🧽🍫</button>
-    <button onclick="showCategory('fiesta')">Fiesta🥳🎉</button>
-  </div>
-
-  <div id="usa1" class="products">
-    <div class="product">
-      <span>Weed OG</span>
-      <button onclick="addToCart('Weed OG')">+</button>
-    </div>
-  </div>
-
-  <div id="usa2" class="products">
-    <div class="product">
-      <span>Weed Premium</span>
-      <button onclick="addToCart('Weed Premium')">+</button>
-    </div>
-  </div>
-
-  <div id="choco" class="products">
-    <div class="product">
-      <span>Choco Space</span>
-      <button onclick="addToCart('Choco Space')">+</button>
-    </div>
-  </div>
-
-  <div id="fiesta" class="products">
-    <div class="product">
-      <span>Pack Fiesta</span>
-      <button onclick="addToCart('Pack Fiesta')">+</button>
-    </div>
-  </div>
+<div class="product">
+  <p>Produit A - 10€</p>
+  <button onclick="addToCart('Produit A', 10)">Ajouter</button>
 </div>
 
-<!-- PANIER INDEPENDANT -->
-<div class="cart">
-  <h3>🛒 Panier</h3>
-  <div id="cartItems"></div>
+<div class="product">
+  <p>Produit B - 5€</p>
+  <button onclick="addToCart('Produit B', 5)">Ajouter</button>
+</div>
 
-  <input class="address" id="address" placeholder="Adresse de livraison">
-
-  <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
-
-  <button class="order-btn" onclick="sendOrder()">Passer commande</button>
+<div id="cart">
+  <h2>Panier</h2>
+  <ul id="cartList"></ul>
+  <h3>Total : <span id="total">0</span> €</h3>
 </div>
 
 <script>
-let cart = [];
+  let total = 0;
 
-function showCategory(cat) {
-  document.querySelectorAll('.products').forEach(p => p.style.display = "none");
-  document.getElementById(cat).style.display = "block";
-}
+  function addToCart(name, price) {
+    const li = document.createElement("li");
+    li.textContent = name + " - " + price + "€";
+    document.getElementById("cartList").appendChild(li);
 
-function addToCart(item) {
-  cart.push(item);
-  renderCart();
-}
-
-function renderCart() {
-  let html = "";
-  cart.forEach((item, i) => {
-    html += `<div class="cart-item">
-      ${item}
-      <button onclick="removeItem(${i})">❌</button>
-    </div>`;
-  });
-  document.getElementById("cartItems").innerHTML = html;
-}
-
-function removeItem(i) {
-  cart.splice(i,1);
-  renderCart();
-}
-
-function sendOrder() {
-  let address = document.getElementById("address").value;
-  let snap = document.getElementById("snap").value;
-
-  if(cart.length == 0) {
-    alert("Panier vide");
-    return;
+    total += price;
+    document.getElementById("total").textContent = total;
   }
-
-  let message = "Nouvelle commande:\n\n";
-  cart.forEach(i => message += "- " + i + "\n");
-  message += "\nAdresse: " + address;
-  message += "\nSnap: " + snap;
-
-  let token = "8595266252:AAFsFaGPr2oxqlKOaP5fJ4VPTMNCLrHZP8o";
-  let chat_id = "8330410504";
-
-  fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      chat_id: chat_id,
-      text: message
-    })
-  });
-
-  alert("Commande envoyée !");
-  cart = [];
-  renderCart();
-}
 </script>
 
 </body>
 </html>
-
