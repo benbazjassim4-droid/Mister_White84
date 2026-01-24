@@ -1,4 +1,3 @@
-"
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -338,7 +337,7 @@
   }
   .order-btn:active { transform: scale(0.99); }
 
-  /* ✅ Bouton Telegram (Étape 2) */
+  /* ✅ Bouton Telegram */
   .telegram-btn{
     display:block;
     margin-top: 10px;
@@ -408,7 +407,7 @@
     box-shadow: var(--shadow);
   }
 
-  /* Modal vidéo (compact) */
+  /* Modal vidéo */
   #videoModal {
     display: none;
     position: fixed;
@@ -480,10 +479,9 @@
         <input class="address" id="address" placeholder="Adresse de livraison">
         <input class="address" id="snap" placeholder="Snapchat (ex: misterwhite84)">
 
-        <!-- ✅ AJOUT : bouton Telegram (Étape 2) -->
         <a class="telegram-btn" id="tgLink" href="#" target="_blank">
-  ✅ Activer le suivi Telegram (obligatoire)
-</a>
+          ✅ Activer le suivi Telegram (obligatoire)
+        </a>
         <div class="telegram-hint">
           Clique puis appuie sur <b>Start</b> sur Telegram pour recevoir le suivi de ta commande
         </div>
@@ -584,7 +582,7 @@ function showCategory(cat) {
   setActiveCatBtn(cat);
 }
 
-/* ✅ Accordéon toggle */
+/* Accordéon */
 function toggleAccordion(btn){
   const acc = btn.closest(".accordion");
   if(!acc) return;
@@ -604,7 +602,6 @@ function renderProducts() {
     const card = document.createElement("div");
     card.className = "product";
 
-    // Media
     const media = document.createElement("div");
     media.className = "media";
 
@@ -629,13 +626,11 @@ function renderProducts() {
     }
     card.appendChild(media);
 
-    // Titre
     const title = document.createElement("div");
     title.className = "title";
     title.textContent = p.name;
     card.appendChild(title);
 
-    // ✅ Accordéon INFOS (ouvert par défaut)
     const infoAcc = document.createElement("div");
     infoAcc.className = "accordion open";
     infoAcc.innerHTML = `
@@ -647,7 +642,6 @@ function renderProducts() {
     `;
     card.appendChild(infoAcc);
 
-    // ✅ Accordéon DETAILS (fermé par défaut)
     const detAcc = document.createElement("div");
     detAcc.className = "accordion";
     detAcc.innerHTML = `
@@ -659,7 +653,6 @@ function renderProducts() {
     `;
     card.appendChild(detAcc);
 
-    // Prix + Ajouter
     const row = document.createElement("div");
     row.className = "row";
 
@@ -699,10 +692,6 @@ function addToCart(productId){
 
   saveCart();
   renderCart();
-
-  try { if(navigator.vibrate) navigator.vibrate(18); } catch(e){}
-  pulse(document.getElementById("btnCart"));
-  pulse(document.getElementById("cartBadge"));
 }
 
 function incQty(id){
@@ -710,7 +699,6 @@ function incQty(id){
   cart[id].qty += 1;
   saveCart();
   renderCart();
-  pulse(document.getElementById("cartBadge"));
 }
 function decQty(id){
   if(!cart[id]) return;
@@ -718,7 +706,6 @@ function decQty(id){
   if(cart[id].qty <= 0) delete cart[id];
   saveCart();
   renderCart();
-  pulse(document.getElementById("cartBadge"));
 }
 function removeLine(id){
   if(!cart[id]) return;
@@ -783,7 +770,28 @@ function renderCart(){
   }
 }
 
-/* Telegram */
+/* ✅ SYSTEME FILE D’ATTENTE */
+
+/* identifiant client */
+function getClientId(){
+  let id = localStorage.getItem("mw_client_id");
+  if(!id){
+    id = Math.random().toString(16).slice(2) + Date.now().toString(16);
+    localStorage.setItem("mw_client_id", id);
+  }
+  return id;
+}
+
+/* 🔴 change ici uniquement */
+const BOT_USERNAME = "misterhattest_bot";
+
+document.addEventListener("DOMContentLoaded", () => {
+  const link = document.getElementById("tgLink");
+  if(!link) return;
+  link.href = `https://t.me/${BOT_USERNAME}?start=${getClientId()}`;
+});
+
+/* ✅ Commande -> Vercel API */
 async function sendOrder(){
   const items = Object.values(cart || {});
   const address = document.getElementById("address").value.trim();
@@ -813,18 +821,16 @@ async function sendOrder(){
     total
   };
 
+  const API_BASE = location.hostname.includes("github.io")
+    ? "https://mister-white84.vercel.app"
+    : "";
+
   const btn = document.getElementById("orderBtn");
   btn.disabled = true;
   btn.textContent = "Envoi…";
 
   try{
-   const API_BASE = location.hostname.includes("github.io")
-  ? "https://mister-white84.vercel.app"
-  : "";
-
-const res = await fetch(`${API_BASE}/api/order`, {
-
-", {
+    const res = await fetch(`${API_BASE}/api/order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -834,14 +840,13 @@ const res = await fetch(`${API_BASE}/api/order`, {
 
     if(res.ok && data.ok){
       alert(`Commande envoyée ! Tu es ${data.position}ᵉ sur la liste d’attente.`);
-
       clearCart();
       document.getElementById("address").value = "";
       document.getElementById("snap").value = "";
       goMenu();
     }else{
-  alert("Erreur API : " + (data.error || ("HTTP " + res.status)));
-}
+      alert("Erreur API : " + (data.error || ("HTTP " + res.status)));
+    }
   }catch(e){
     alert("Erreur réseau");
   }finally{
@@ -890,12 +895,6 @@ function saveCart(){
 }
 
 /* Helpers */
-function pulse(el){
-  if(!el) return;
-  el.classList.remove("pulse");
-  void el.offsetWidth;
-  el.classList.add("pulse");
-}
 function escapeHtml(str){
   return String(str)
     .replaceAll("&","&amp;")
@@ -905,19 +904,6 @@ function escapeHtml(str){
     .replaceAll("'","&#039;");
 }
 function escapeAttr(str){ return escapeHtml(str); }
-/* ===== IDENTIFIANT CLIENT (liste d'attente) ===== */
-function getClientId(){
-  let id = localStorage.getItem("mw_client_id");
-  if(!id){
-    id = Math.random().toString(16).slice(2) + Date.now().toString(16);
-    localStorage.setItem("mw_client_id", id);
-  }
-  return id;
-}
-
-/* ===== LIEN TELEGRAM AVEC /start ===== */
-const BOT_USERNAME = "misterhattest_bot"; // 🔴 à changer (sans le @)
-
 
 /* INIT */
 renderProducts();
@@ -926,10 +912,3 @@ renderCart();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
