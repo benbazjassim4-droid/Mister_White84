@@ -905,12 +905,6 @@ function getClientId(){
 /* ===== LIEN TELEGRAM AVEC /start ===== */
 const BOT_USERNAME = "misterhattest_bot"; // 🔴 à changer (sans le @)
 
-document.addEventListener("DOMContentLoaded", () => {
-  const link = document.getElementById("tgLink");
-  if(!link) return;
-  const clientId = getClientId();
-  link.href = `https://t.me/${BOT_USERNAME}?start=${clientId}`;
-});
 
 /* INIT */
 renderProducts();
@@ -919,5 +913,6 @@ renderCart();
 </script>
 </body>
 </html>
+
 
 
