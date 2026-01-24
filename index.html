@@ -64,9 +64,9 @@
     background: rgba(0,0,0,0.6);
     color: white;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 800;
     cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: transform 0.15s;
     box-shadow: var(--shadow);
   }
   .categories button:hover { transform: scale(1.02); }
@@ -88,34 +88,50 @@
     box-shadow: var(--shadow);
   }
 
-  /* ✅ Média plus petit pour mobile */
+  /* Image + overlay */
   .media {
+    position: relative;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     background: rgba(255,255,255,0.06);
   }
+
+  /* Taille réduite téléphone */
   .media img {
     width: 100%;
-    height: 190px;          /* ✅ réduit */
-    object-fit: cover;      /* ✅ cadrage clean */
+    height: 165px;
+    object-fit: cover;
     display: block;
     cursor: pointer;
   }
   @media (max-width: 360px){
-    .media img { height: 170px; }
+    .media img { height: 150px; }
+  }
+
+  .overlay-title{
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 13px;
+    background: rgba(0,0,0,0.65);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(4px);
   }
 
   .placeholder {
     width: 100%;
-    height: 170px;
+    height: 165px;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
     padding: 10px;
     color: rgba(255,255,255,0.85);
-    font-weight: 800;
+    font-weight: 900;
   }
   .placeholder small {
     display:block;
@@ -126,25 +142,49 @@
 
   .title { font-weight: 900; line-height: 1.2; }
 
-  /* ✅ Rubriques */
-  .section {
+  /* ✅ Accordéons */
+  .accordion{
     background: rgba(0,0,0,0.35);
     border: 1px solid rgba(255,255,255,0.10);
     border-radius: 12px;
-    padding: 10px;
+    overflow: hidden;
   }
-  .section .section-title{
+  .acc-head{
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .acc-title{
     font-weight: 900;
     font-size: 12px;
     letter-spacing: 0.4px;
-    opacity: 0.95;
-    margin-bottom: 6px;
     text-transform: uppercase;
+    opacity: 0.95;
   }
-  .section .section-body{
+  .acc-arrow{
+    font-weight: 900;
+    opacity: 0.9;
+    transition: transform .15s;
+  }
+  .accordion.open .acc-arrow{
+    transform: rotate(180deg);
+  }
+  .acc-body{
+    display: none;
+    padding: 0 10px 10px 10px;
     color: var(--muted);
     font-size: 13px;
     line-height: 1.35;
+  }
+  .accordion.open .acc-body{
+    display: block;
   }
 
   .row {
@@ -153,7 +193,6 @@
     justify-content: space-between;
     gap: 10px;
   }
-
   .price { font-weight: 900; }
 
   .add-btn {
@@ -218,7 +257,6 @@
     flex-shrink: 0;
     background: rgba(255,255,255,0.08);
   }
-
   .thumb.placeholder-thumb{
     display:flex;
     align-items:center;
@@ -251,7 +289,6 @@
     transition: transform 0.12s;
   }
   .qty-btn:active { transform: scale(0.95); }
-
   .qty { width: 22px; text-align:center; font-weight: 900; }
 
   .remove-btn {
@@ -299,7 +336,6 @@
     transition: transform 0.12s;
   }
   .order-btn:active { transform: scale(0.99); }
-  .order-btn[disabled]{ opacity: 0.65; cursor: not-allowed; }
 
   /* Nav bas */
   .bottom-nav {
@@ -351,7 +387,7 @@
     box-shadow: var(--shadow);
   }
 
-  /* ✅ Modal vidéo plus petit pour téléphone */
+  /* Modal vidéo (compact) */
   #videoModal {
     display: none;
     position: fixed;
@@ -362,12 +398,10 @@
     align-items: center;
     padding: 16px;
   }
-  #videoModal .inner {
-    width: min(520px, 94vw);
-  }
+  #videoModal .inner { width: min(520px, 94vw); }
   #videoModal video {
     width: 100%;
-    max-height: 55vh;        /* ✅ réduit */
+    max-height: 50vh;
     border-radius: 12px;
     background: black;
   }
@@ -451,24 +485,18 @@
   </div>
 
 <script>
-/* =========================
-   PRODUITS
-   - Infos + Détails pour tous (on modifiera après)
-   ========================= */
-const DEFAULT_INFO = `Infos à venir…`;
+const DEFAULT_INFO = "Infos à venir…";
 const DEFAULT_DETAILS = [
-  `Strain: —`,
-  `Breeder: —`,
-  `Poids: —`,
-  `Prix: —`
+  "Strain: —",
+  "Breeder: —",
+  "Poids: —",
+  "Prix: —"
 ];
 
 const PRODUCTS = [
   { id:"prodA", category:"usa1", name:"Produit A", price:0, img:"", video:"",
-    info: DEFAULT_INFO,
-    details: DEFAULT_DETAILS
+    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
   },
-
   {
     id:"tha_phantom",
     category:"usa2",
@@ -476,35 +504,27 @@ const PRODUCTS = [
     price:60,
     img:"asset/tha_phantom.jpg",
     video:"asset/tha_phantom_video.mp4",
-    info: `Découvrez notre première nouvelle cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit.`,
-    details: [
-      `Strain: Tha Phantom (cotton candy x black mamba)`,
-      `Breeder: Exotikz Flowerz`,
-      `Poids: 3,5g`,
-      `Prix: 60€`
+    overlay:"Tha Phantom",
+    info:'Découvrez notre première nouvelle cali, "Tha Phantom". Un goût exceptionnel et une expérience inoubliable pour vos papilles et votre esprit.',
+    details:[
+      "Strain: Tha Phantom (cotton candy x black mamba)",
+      "Breeder: Exotikz Flowerz",
+      "Poids: 3,5g",
+      "Prix: 60€"
     ]
   },
-
   { id:"prodB", category:"usa2", name:"Bubble Gum Runtz X Candy Gas", price:0, img:"", video:"",
-    info: DEFAULT_INFO,
-    details: DEFAULT_DETAILS
+    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
   },
-
   { id:"prodC", category:"choco", name:"Produit C", price:0, img:"", video:"",
-    info: DEFAULT_INFO,
-    details: DEFAULT_DETAILS
+    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
   },
-
   { id:"prodD", category:"fiesta", name:"Produit D", price:0, img:"", video:"",
-    info: DEFAULT_INFO,
-    details: DEFAULT_DETAILS
+    overlay:"", info: DEFAULT_INFO, details: DEFAULT_DETAILS
   },
 ];
 
-/* =========================
-   PANIER (quantités + sauvegarde)
-   ========================= */
-const CART_KEY = "mw_cart_v3";
+const CART_KEY = "mw_cart_v5";
 let cart = loadCart();
 
 /* NAV */
@@ -514,7 +534,6 @@ function goMenu() {
   document.getElementById("btnMenu").classList.add("active");
   document.getElementById("btnCart").classList.remove("active");
 }
-
 function goCart() {
   document.getElementById("screenMenu").classList.remove("active");
   document.getElementById("screenCart").classList.add("active");
@@ -536,6 +555,13 @@ function showCategory(cat) {
   setActiveCatBtn(cat);
 }
 
+/* ✅ Accordéon toggle */
+function toggleAccordion(btn){
+  const acc = btn.closest(".accordion");
+  if(!acc) return;
+  acc.classList.toggle("open");
+}
+
 /* Render produits */
 function renderProducts() {
   ["usa1","usa2","choco","fiesta"].forEach(cat => {
@@ -549,7 +575,7 @@ function renderProducts() {
     const card = document.createElement("div");
     card.className = "product";
 
-    // media
+    // Media
     const media = document.createElement("div");
     media.className = "media";
 
@@ -559,6 +585,13 @@ function renderProducts() {
       img.alt = p.name;
       img.onclick = () => { if(p.video) showVideo(p.video); };
       media.appendChild(img);
+
+      if(p.overlay){
+        const overlay = document.createElement("div");
+        overlay.className = "overlay-title";
+        overlay.textContent = p.overlay;
+        media.appendChild(overlay);
+      }
     } else {
       const ph = document.createElement("div");
       ph.className = "placeholder";
@@ -567,31 +600,37 @@ function renderProducts() {
     }
     card.appendChild(media);
 
-    // ✅ Titre (ex: "Tha Phantom")
+    // Titre
     const title = document.createElement("div");
     title.className = "title";
     title.textContent = p.name;
     card.appendChild(title);
 
-    // ✅ Rubrique INFOS
-    const infoBox = document.createElement("div");
-    infoBox.className = "section";
-    infoBox.innerHTML = `
-      <div class="section-title">Infos</div>
-      <div class="section-body">${escapeHtml(p.info || "")}</div>
+    // ✅ Accordéon INFOS (ouvert par défaut)
+    const infoAcc = document.createElement("div");
+    infoAcc.className = "accordion open";
+    infoAcc.innerHTML = `
+      <button class="acc-head" type="button" onclick="toggleAccordion(this)">
+        <span class="acc-title">Infos</span>
+        <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">${escapeHtml(p.info || "")}</div>
     `;
-    card.appendChild(infoBox);
+    card.appendChild(infoAcc);
 
-    // ✅ Rubrique DETAILS
-    const detailsBox = document.createElement("div");
-    detailsBox.className = "section";
-    detailsBox.innerHTML = `
-      <div class="section-title">Détails</div>
-      <div class="section-body">${(p.details || []).map(x => escapeHtml(x)).join("<br>")}</div>
+    // ✅ Accordéon DETAILS (fermé par défaut)
+    const detAcc = document.createElement("div");
+    detAcc.className = "accordion";
+    detAcc.innerHTML = `
+      <button class="acc-head" type="button" onclick="toggleAccordion(this)">
+        <span class="acc-title">Détails</span>
+        <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">${(p.details || []).map(x => escapeHtml(x)).join("<br>")}</div>
     `;
-    card.appendChild(detailsBox);
+    card.appendChild(detAcc);
 
-    // price + add
+    // Prix + Ajouter
     const row = document.createElement("div");
     row.className = "row";
 
@@ -644,7 +683,6 @@ function incQty(id){
   renderCart();
   pulse(document.getElementById("cartBadge"));
 }
-
 function decQty(id){
   if(!cart[id]) return;
   cart[id].qty -= 1;
@@ -653,14 +691,12 @@ function decQty(id){
   renderCart();
   pulse(document.getElementById("cartBadge"));
 }
-
 function removeLine(id){
   if(!cart[id]) return;
   delete cart[id];
   saveCart();
   renderCart();
 }
-
 function clearCart(){
   cart = {};
   saveCart();
@@ -718,7 +754,7 @@ function renderCart(){
   }
 }
 
-/* Telegram order */
+/* Telegram */
 async function sendOrder(){
   const items = Object.values(cart);
   const address = document.getElementById("address").value.trim();
@@ -740,8 +776,8 @@ async function sendOrder(){
   message += `\nAdresse: ${address}`;
   message += `\nSnap: ${snap ? snap : "Non renseigné"}`;
 
-  const token = "TON_TOKEN";
-  const chat_id = "TON_CHAT_ID";
+  const token = "8595266252:AAFsFaGPr2oxqlKOaP5fJ4VPTMNCLrHZP8o";
+  const chat_id = "8330410504";
 
   const btn = document.getElementById("orderBtn");
   btn.disabled = true;
